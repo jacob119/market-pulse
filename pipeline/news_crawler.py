@@ -16,12 +16,10 @@ NEWS_FEEDS = {
 }
 YT_CHANNELS = {
     '슈카월드': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCsJ6RuBiTVWRX156FVbeaGg',
-    '삼프로TV': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCMeDSk2gMfJWvWBsVFicxYA',
-    '올랜도캠퍼스': 'https://www.youtube.com/feeds/videos.xml?channel_id=UC7gAGjR3Bj2t8ewHmV37U_A',
-    '소수몽키': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCkW5Jm7bQbVFpENfica0MBQ',
-    '체슬리TV': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCPKjw8t2kG1dOXguFKhEkUQ',
-    '머니두': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCw2sg9MiQHJaeRJfaYMT4cQ',
-    '박곰희TV': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCCFeoO_T1LC4lisHfTr3IuA',
+    '삼프로TV': 'https://www.youtube.com/feeds/videos.xml?channel_id=UChlv4GSd7OQl3js-jkLOnFA',
+    '소수몽키': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCC3yfxS5qC6PCwDzetUuEWg',
+    '체슬리TV': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCXST0Hq6CAmG0dmo3jgrlEw',
+    '머니두': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCznImSIaxZR7fdLCICLdgaQ',
 }
 OUTPUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                       'examples', 'dashboard', 'public', 'news_data.json')
