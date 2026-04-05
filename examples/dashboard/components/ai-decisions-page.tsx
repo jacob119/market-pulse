@@ -370,13 +370,32 @@ export function AIDecisionsPage({ data, market = "KR" }: AIDecisionsPageProps) {
                     </TableCell>
                     <TableCell className="text-right">
                       {profitRate !== null ? (
-                        <span
-                          className={`text-sm font-semibold ${
-                            profitRate >= 0 ? "text-emerald-400" : "text-red-400"
-                          }`}
-                        >
-                          {formatPercent(profitRate)}
-                        </span>
+                        <div className="flex flex-col items-end">
+                          <span
+                            className={`text-sm font-semibold ${
+                              profitRate >= 0 ? "text-emerald-400" : "text-red-400"
+                            }`}
+                          >
+                            {formatPercent(profitRate)}
+                          </span>
+                          {(() => {
+                            const profitAmount = stock?.profit ?? (
+                              stock && stock.current_price != null && (stock.buy_price ?? stock.avg_price) != null && stock.quantity != null
+                                ? (stock.current_price - (stock.buy_price ?? stock.avg_price ?? 0)) * stock.quantity
+                                : null
+                            )
+                            if (profitAmount == null || isNaN(profitAmount)) return null
+                            return (
+                              <span
+                                className={`text-xs ${
+                                  profitAmount >= 0 ? "text-emerald-400/70" : "text-red-400/70"
+                                }`}
+                              >
+                                ({profitAmount >= 0 ? "+" : ""}{formatCurrency(profitAmount)})
+                              </span>
+                            )
+                          })()}
+                        </div>
                       ) : (
                         <span className="text-muted-foreground">-</span>
                       )}

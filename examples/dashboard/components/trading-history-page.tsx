@@ -332,7 +332,7 @@ export function TradingHistoryPage({ history, summary, prismPerformance = [], ma
           <CardContent className="p-6">
             <div className="flex items-center gap-3 mb-2">
               <History className="w-5 h-5 text-primary" />
-              <span className="text-sm text-muted-foreground">{t("trading.totalTrades")}</span>
+              <span className="text-sm text-foreground/70">{t("trading.totalTrades")}</span>
             </div>
             <p className="text-3xl font-bold text-foreground">{total_trades || 0}{t("trading.times")}</p>
             <p className="text-xs text-muted-foreground mt-1">
@@ -345,7 +345,7 @@ export function TradingHistoryPage({ history, summary, prismPerformance = [], ma
           <CardContent className="p-6">
             <div className="flex items-center gap-3 mb-2">
               <Award className="w-5 h-5 text-success" />
-              <span className="text-sm text-muted-foreground">{t("trading.winRate")}</span>
+              <span className="text-sm text-foreground/70">{t("trading.winRate")}</span>
             </div>
             <p className="text-3xl font-bold text-success">{(win_rate || 0).toFixed(0)}%</p>
             <p className="text-xs text-muted-foreground mt-1">
@@ -358,7 +358,7 @@ export function TradingHistoryPage({ history, summary, prismPerformance = [], ma
           <CardContent className="p-6">
             <div className="flex items-center gap-3 mb-2">
               <TrendingUp className="w-5 h-5 text-success" />
-              <span className="text-sm text-muted-foreground">{t("trading.avgWinRate")}</span>
+              <span className="text-sm text-foreground/70">{t("trading.avgWinRate")}</span>
             </div>
             <p className="text-3xl font-bold text-success">{formatPercent(avgWinRate)}</p>
             <p className="text-xs text-muted-foreground mt-1">
@@ -371,7 +371,7 @@ export function TradingHistoryPage({ history, summary, prismPerformance = [], ma
           <CardContent className="p-6">
             <div className="flex items-center gap-3 mb-2">
               <TrendingDown className="w-5 h-5 text-destructive" />
-              <span className="text-sm text-muted-foreground">{t("trading.avgLossRate")}</span>
+              <span className="text-sm text-foreground/70">{t("trading.avgLossRate")}</span>
             </div>
             <p className="text-3xl font-bold text-destructive">{formatPercent(avgLossRate)}</p>
             <p className="text-xs text-muted-foreground mt-1">
@@ -387,7 +387,7 @@ export function TradingHistoryPage({ history, summary, prismPerformance = [], ma
           <CardContent className="p-6">
             <div className="flex items-center gap-2 mb-2">
               <Scale className="w-5 h-5 text-primary" />
-              <span className="text-sm text-muted-foreground">{t("trading.profitFactor")}</span>
+              <span className="text-sm text-foreground/70">{t("trading.profitFactor")}</span>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <HelpCircle className="w-4 h-4 text-muted-foreground/50 cursor-help" />
@@ -416,7 +416,7 @@ export function TradingHistoryPage({ history, summary, prismPerformance = [], ma
           <CardContent className="p-6">
             <div className="flex items-center gap-2 mb-2">
               <Percent className="w-5 h-5 text-chart-3" />
-              <span className="text-sm text-muted-foreground">{t("trading.riskRewardRatio")}</span>
+              <span className="text-sm text-foreground/70">{t("trading.riskRewardRatio")}</span>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <HelpCircle className="w-4 h-4 text-muted-foreground/50 cursor-help" />
@@ -445,7 +445,7 @@ export function TradingHistoryPage({ history, summary, prismPerformance = [], ma
           <CardContent className="p-6">
             <div className="flex items-center gap-2 mb-2">
               <BarChart3 className="w-5 h-5 text-orange-600" />
-              <span className="text-sm text-muted-foreground">{t("trading.mdd")}</span>
+              <span className="text-sm text-foreground/70">{t("trading.mdd")}</span>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <HelpCircle className="w-4 h-4 text-muted-foreground/50 cursor-help" />
@@ -474,7 +474,7 @@ export function TradingHistoryPage({ history, summary, prismPerformance = [], ma
           <CardContent className="p-6">
             <div className="flex items-center gap-3 mb-2">
               <Flame className="w-5 h-5 text-orange-500" />
-              <span className="text-sm text-muted-foreground">{t("trading.maxWinStreak")}</span>
+              <span className="text-sm text-foreground/70">{t("trading.maxWinStreak")}</span>
             </div>
             <p className="text-3xl font-bold text-orange-500">{maxConsecutiveWins}{t("trading.consecutive")}</p>
             <p className="text-xs text-muted-foreground mt-1">
@@ -487,7 +487,7 @@ export function TradingHistoryPage({ history, summary, prismPerformance = [], ma
           <CardContent className="p-6">
             <div className="flex items-center gap-3 mb-2">
               <Calendar className="w-5 h-5 text-chart-4" />
-              <span className="text-sm text-muted-foreground">{t("trading.avgHoldingDays")}</span>
+              <span className="text-sm text-foreground/70">{t("trading.avgHoldingDays")}</span>
             </div>
             <p className="text-3xl font-bold text-chart-4">{(avg_holding_days || 0).toFixed(0)}{t("common.days")}</p>
             <p className="text-xs text-muted-foreground mt-1">
@@ -513,7 +513,7 @@ export function TradingHistoryPage({ history, summary, prismPerformance = [], ma
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-2">
                 <Activity className="w-5 h-5 text-indigo-600" />
-                <span className="text-sm text-muted-foreground">{t("trading.alpha")}</span>
+                <span className="text-sm text-foreground/70">{t("trading.alpha")}</span>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <HelpCircle className="w-4 h-4 text-muted-foreground/50 cursor-help" />
@@ -541,7 +541,7 @@ export function TradingHistoryPage({ history, summary, prismPerformance = [], ma
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-2">
                 <LineChart className="w-5 h-5 text-cyan-600" />
-                <span className="text-sm text-muted-foreground">{t("trading.beta")}</span>
+                <span className="text-sm text-foreground/70">{t("trading.beta")}</span>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <HelpCircle className="w-4 h-4 text-muted-foreground/50 cursor-help" />
@@ -570,7 +570,7 @@ export function TradingHistoryPage({ history, summary, prismPerformance = [], ma
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-2">
                 <Gauge className="w-5 h-5 text-violet-600" />
-                <span className="text-sm text-muted-foreground">{t("trading.sharpeRatio")}</span>
+                <span className="text-sm text-foreground/70">{t("trading.sharpeRatio")}</span>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <HelpCircle className="w-4 h-4 text-muted-foreground/50 cursor-help" />
@@ -599,7 +599,7 @@ export function TradingHistoryPage({ history, summary, prismPerformance = [], ma
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-2">
                 <Target className="w-5 h-5 text-teal-600" />
-                <span className="text-sm text-muted-foreground">{t("trading.informationRatio")}</span>
+                <span className="text-sm text-foreground/70">{t("trading.informationRatio")}</span>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <HelpCircle className="w-4 h-4 text-muted-foreground/50 cursor-help" />

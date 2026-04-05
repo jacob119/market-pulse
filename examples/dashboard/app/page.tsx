@@ -19,6 +19,7 @@ import { ProjectFooter } from "@/components/project-footer"
 import { useLanguage } from "@/components/language-provider"
 import { useMarket } from "@/components/market-selector"
 import { TriggerReliabilityBadge } from "@/components/trigger-reliability-badge"
+import { formatCurrency } from "@/lib/currency"
 import type { DashboardData, Holding, Market } from "@/types/dashboard"
 
 type TabType = "dashboard" | "ai-decisions" | "trading" | "watchlist" | "insights" | "portfolio" | "news" | "jeoningu-lab"
@@ -218,12 +219,12 @@ function DashboardContent() {
                   <h3 className="text-sm font-bold text-foreground">급등주 TOP 5</h3>
                   <span className="text-[10px] text-muted-foreground ml-auto">{data.realtime?.updated_at}</span>
                 </div>
-                <div className="grid grid-cols-5 gap-2">
+                <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
                   {data.top_gainers.map((g: any, i: number) => (
-                    <div key={g.code ?? i} className="text-center p-2 rounded-lg bg-card/50 border border-border/20 hover:border-red-500/30 transition-colors">
-                      <p className="text-[10px] text-muted-foreground truncate">{g.name}</p>
-                      <p className="text-sm font-bold text-foreground">{(g.price ?? 0).toLocaleString()}</p>
-                      <p className="text-xs font-semibold text-red-400">▲{g.change_rate}%</p>
+                    <div key={g.code ?? i} className="text-center p-3 rounded-lg bg-card/50 border border-border/20 hover:border-red-500/30 transition-colors">
+                      <p className="text-xs text-muted-foreground truncate">{g.name}</p>
+                      <p className="text-base font-bold text-foreground">{(g.price ?? 0).toLocaleString()}</p>
+                      <p className="text-sm font-semibold text-red-400">▲{g.change_rate}%</p>
                     </div>
                   ))}
                 </div>
@@ -261,6 +262,34 @@ function DashboardContent() {
               }
               market={market}
             />
+
+            {/* 실전투자 총 수익 요약 배너 */}
+            {data.summary?.real_trading && (() => {
+              const rt = data.summary.real_trading
+              const deposit = rt.deposit ?? 0
+              const evalAmount = rt.total_eval_amount ?? 0
+              const profitAmount = rt.total_profit_amount ?? 0
+              const profitRate = rt.total_profit_rate ?? 0
+              const isProfit = profitAmount >= 0
+              return (
+                <div className={`rounded-xl px-4 py-3 border ${
+                  isProfit
+                    ? "bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border-emerald-500/20"
+                    : "bg-gradient-to-r from-red-500/10 to-orange-500/10 border-red-500/20"
+                }`}>
+                  <p className="text-sm font-medium text-foreground flex items-center gap-2 flex-wrap">
+                    <span>💰</span>
+                    <span>{language === "ko" ? "총 투자금" : "Total Investment"} {formatCurrency(deposit, market, language as "ko" | "en")}</span>
+                    <span className="text-muted-foreground">→</span>
+                    <span>{language === "ko" ? "평가금" : "Valuation"} {formatCurrency(evalAmount, market, language as "ko" | "en")}</span>
+                    <span className="text-muted-foreground">|</span>
+                    <span className={isProfit ? "text-emerald-400 font-bold" : "text-red-400 font-bold"}>
+                      {language === "ko" ? "수익금" : "Profit"} {formatCurrency(profitAmount, market, language as "ko" | "en")} ({profitRate >= 0 ? "+" : ""}{(profitRate ?? 0).toFixed(2)}%)
+                    </span>
+                  </p>
+                </div>
+              )
+            })()}
 
             {/* 실전투자 포트폴리오 - 최우선 표시 */}
             {data.real_portfolio && data.real_portfolio.length > 0 && (

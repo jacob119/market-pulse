@@ -921,15 +921,15 @@ export function TradingInsightsPage({ data, market = "KR" }: TradingInsightsPage
                       </div>
                       <div className="space-y-1">
                         <p className="font-medium">
-                          <span className="text-muted-foreground">{t("insights.condition")}:</span>{" "}
+                          <span className="text-foreground/70">{t("insights.condition")}:</span>{" "}
                           {principle.condition}
                         </p>
                         <p className="text-primary">
-                          <span className="text-muted-foreground">{t("insights.action")}:</span>{" "}
+                          <span className="text-foreground/70">{t("insights.action")}:</span>{" "}
                           {principle.action}
                         </p>
                         {principle.reason && (
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-sm text-foreground/70">
                             <span>{t("insights.reason")}:</span> {principle.reason}
                           </p>
                         )}
@@ -937,7 +937,7 @@ export function TradingInsightsPage({ data, market = "KR" }: TradingInsightsPage
                     </div>
                     <div className="text-right space-y-1 min-w-[120px]">
                       <div className="text-sm">
-                        <span className="text-muted-foreground">{t("insights.confidence")}:</span>
+                        <span className="text-foreground/70">{t("insights.confidence")}:</span>
                       </div>
                       {getConfidenceBar(principle.confidence)}
                       <div className="text-xs text-muted-foreground">
@@ -1012,21 +1012,21 @@ export function TradingInsightsPage({ data, market = "KR" }: TradingInsightsPage
                       {/* Trade Details */}
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                         <div>
-                          <span className="text-muted-foreground">{t("insights.tradeDate")}</span>
+                          <span className="text-foreground/70">{t("insights.tradeDate")}</span>
                           <p className="font-medium">{formatDate(entry.trade_date)}</p>
                         </div>
                         <div>
-                          <span className="text-muted-foreground">{t("insights.holdingDays")}</span>
+                          <span className="text-foreground/70">{t("insights.holdingDays")}</span>
                           <p className="font-medium">{entry.holding_days ?? 0}{language === "ko" ? "일" : " days"}</p>
                         </div>
                         <div>
-                          <span className="text-muted-foreground">{t("insights.profitRate")}</span>
+                          <span className="text-foreground/70">{t("insights.profitRate")}</span>
                           <p className={`font-medium ${(entry.profit_rate ?? 0) >= 0 ? "text-green-600" : "text-red-600"}`}>
                             {formatPercentDirect(entry.profit_rate)}
                           </p>
                         </div>
                         <div>
-                          <span className="text-muted-foreground">{t("insights.layer")}</span>
+                          <span className="text-foreground/70">{t("insights.layer")}</span>
                           <p className="font-medium">Layer {entry.compression_layer ?? 0}</p>
                         </div>
                       </div>
