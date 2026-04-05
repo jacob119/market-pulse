@@ -1,0 +1,162 @@
+{
+  "accounts": [
+    {
+      "name": "NH투자증권",
+      "type": "NH",
+      "stocks": [
+        {
+          "name": "SK하이닉스",
+          "code": "000660",
+          "quantity": 138,
+          "avg_price": 180623,
+          "sector": "반도체"
+        },
+        {
+          "name": "삼성전자",
+          "code": "005930",
+          "quantity": 243,
+          "avg_price": 97163,
+          "sector": "반도체"
+        },
+        {
+          "name": "현대모비스",
+          "code": "012330",
+          "quantity": 40,
+          "avg_price": 437875,
+          "sector": "자동차부품"
+        },
+        {
+          "name": "GS",
+          "code": "078930",
+          "quantity": 130,
+          "avg_price": 72854,
+          "sector": "에너지"
+        },
+        {
+          "name": "GST",
+          "code": "083450",
+          "quantity": 130,
+          "avg_price": 30550,
+          "sector": "반도체장비"
+        },
+        {
+          "name": "TIGER S&P500",
+          "code": "360750",
+          "quantity": 77,
+          "avg_price": 19850,
+          "sector": "해외ETF"
+        },
+        {
+          "name": "현대차",
+          "code": "005380",
+          "quantity": 4,
+          "avg_price": 556250,
+          "sector": "자동차"
+        },
+        {
+          "name": "두산에너빌리티",
+          "code": "034020",
+          "quantity": 120,
+          "avg_price": 99866,
+          "sector": "에너지"
+        },
+        {
+          "name": "현대로템",
+          "code": "064350",
+          "quantity": 10,
+          "avg_price": 263000,
+          "sector": "방산"
+        },
+        {
+          "name": "네이버",
+          "code": "035420",
+          "quantity": 80,
+          "avg_price": 238000,
+          "sector": "인터넷"
+        },
+        {
+          "name": "카카오",
+          "code": "035720",
+          "quantity": 10,
+          "avg_price": 51900,
+          "sector": "인터넷"
+        },
+        {
+          "name": "TIGER 지주회사",
+          "code": "105010",
+          "quantity": 1816,
+          "avg_price": 21035,
+          "sector": "지주ETF"
+        },
+        {
+          "name": "케이씨텍",
+          "code": "029460",
+          "quantity": 100,
+          "avg_price": 37100,
+          "sector": "반도체장비"
+        },
+        {
+          "name": "PLUS K방산",
+          "code": "394670",
+          "quantity": 100,
+          "avg_price": 71600,
+          "sector": "방산ETF"
+        },
+        {
+          "name": "한국전력",
+          "code": "015760",
+          "quantity": 100,
+          "avg_price": 48750,
+          "sector": "전력"
+        },
+        {
+          "name": "TIGER S&P500(IRP)",
+          "code": "360750",
+          "quantity": 156,
+          "avg_price": 20000,
+          "sector": "해외ETF"
+        },
+        {
+          "name": "TIGER 달러단기채권",
+          "code": "329750",
+          "quantity": 128,
+          "avg_price": 13545,
+          "sector": "채권ETF"
+        },
+        {
+          "name": "RISE 미국휴머노이드로봇",
+          "code": "0036R0",
+          "quantity": 300,
+          "avg_price": 15560,
+          "sector": "로봇ETF"
+        },
+        {
+          "name": "TIGER 200중공업",
+          "code": "139230",
+          "quantity": 23,
+          "avg_price": 13316,
+          "sector": "중공업ETF"
+        },
+        {
+          "name": "ACE KRX금현물",
+          "code": "411060",
+          "quantity": 30,
+          "avg_price": 21667,
+          "sector": "금ETF"
+        },
+        {
+          "name": "금현물",
+          "code": "GOLD",
+          "quantity": 59,
+          "avg_price": 204188,
+          "sector": "금현물"
+        }
+      ]
+    },
+    {
+      "name": "미래에셋증권",
+      "type": "미래에셋",
+      "stocks": []
+    }
+  ]
+}

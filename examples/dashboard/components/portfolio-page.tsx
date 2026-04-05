@@ -1,0 +1,774 @@
+"use client"
+
+import { useState, useEffect, useCallback } from "react"
+import { Plus, Pencil, Trash2, Wallet, ArrowUpDown, ArrowUp, ArrowDown, Search } from "lucide-react"
+import { getNaverChartUrl } from "@/lib/naver-chart"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableFooter,
+} from "@/components/ui/table"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogDescription,
+} from "@/components/ui/dialog"
+import { useLanguage } from "@/components/language-provider"
+
+interface Stock {
+  name: string
+  code: string
+  quantity: number
+  avg_price: number
+  sector?: string
+  _account?: string
+}
+
+const SECTOR_COLORS: Record<string, string> = {
+  '반도체': 'bg-blue-500/15 text-blue-400 border-blue-500/30',
+  '반도체장비': 'bg-blue-500/10 text-blue-300 border-blue-400/20',
+  '자동차': 'bg-slate-500/15 text-slate-400 border-slate-500/30',
+  '자동차부품': 'bg-slate-500/10 text-slate-300 border-slate-400/20',
+  '에너지': 'bg-amber-500/15 text-amber-400 border-amber-500/30',
+  '방산': 'bg-red-500/15 text-red-400 border-red-500/30',
+  '방산ETF': 'bg-red-500/10 text-red-300 border-red-400/20',
+  '인터넷': 'bg-green-500/15 text-green-400 border-green-500/30',
+  '전력': 'bg-yellow-500/15 text-yellow-400 border-yellow-500/30',
+  '해외ETF': 'bg-purple-500/15 text-purple-400 border-purple-500/30',
+  '지주ETF': 'bg-gray-500/15 text-gray-400 border-gray-500/30',
+  '채권ETF': 'bg-cyan-500/15 text-cyan-400 border-cyan-500/30',
+  '로봇ETF': 'bg-pink-500/15 text-pink-400 border-pink-500/30',
+  '중공업ETF': 'bg-orange-500/15 text-orange-400 border-orange-500/30',
+  '금ETF': 'bg-yellow-600/15 text-yellow-500 border-yellow-600/30',
+  '금현물': 'bg-yellow-600/20 text-yellow-500 border-yellow-600/40',
+}
+
+interface Account {
+  name: string
+  type: string
+  stocks: Stock[]
+}
+
+interface PortfolioData {
+  accounts: Account[]
+}
+
+const STORAGE_KEY = "portfolio_data_v1"
+
+export function PortfolioPage() {
+  const { language } = useLanguage()
+  const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(null)
+  const [activeAccount, setActiveAccount] = useState(0)
+  const [editStock, setEditStock] = useState<{ accountIdx: number; stockIdx: number; stock: Stock } | null>(null)
+  const [showAddModal, setShowAddModal] = useState(false)
+  const [deleteConfirm, setDeleteConfirm] = useState<{ accountIdx: number; stockIdx: number } | null>(null)
+  const [priceMap, setPriceMap] = useState<Record<string, number>>({})
+  const [sortKey, setSortKey] = useState<string>("name")
+  const [sortAsc, setSortAsc] = useState(true)
+  const [filterText, setFilterText] = useState("")
+
+  // Form state for add/edit
+  const [formName, setFormName] = useState("")
+  const [formCode, setFormCode] = useState("")
+  const [formQuantity, setFormQuantity] = useState("")
+  const [formAvgPrice, setFormAvgPrice] = useState("")
+
+  // Load data: 항상 서버 JSON 최신 로드 (localStorage는 사용자 CRUD 편집용)
+  useEffect(() => {
+    // 이전 캐시 키 정리 (한번만 실행)
+    if (localStorage.getItem(STORAGE_KEY)) {
+      localStorage.removeItem(STORAGE_KEY)
+    }
+
+    const EDITED_KEY = STORAGE_KEY + "_edited"
+    const userEdited = localStorage.getItem(EDITED_KEY)
+
+    // 사용자가 직접 편집한 데이터가 있으면 그것을 사용
+    if (userEdited) {
+      try {
+        setPortfolioData(JSON.parse(userEdited))
+        return
+      } catch {
+        localStorage.removeItem(EDITED_KEY)
+      }
+    }
+
+    // 서버 JSON 로드 (항상 최신)
+    fetch("/portfolio_data.json?" + Date.now()) // 캐시 방지
+      .then((res) => res.json())
+      .then((data: PortfolioData) => {
+        setPortfolioData(data)
+      })
+      .catch((err) => console.error("Failed to load portfolio data:", err))
+  }, [])
+
+  // 한투 실시간 현재가 로드
+  useEffect(() => {
+    const loadPrices = async () => {
+      try {
+        const resp = await fetch("/dashboard_data.json")
+        const data = await resp.json()
+        const map: Record<string, number> = {}
+        for (const h of [...(data.holdings ?? []), ...(data.watchlist ?? [])]) {
+          if (h.ticker && h.current_price) map[h.ticker] = h.current_price
+        }
+        setPriceMap(map)
+      } catch {}
+    }
+    loadPrices()
+    const interval = setInterval(loadPrices, 60000)
+    return () => clearInterval(interval)
+  }, [])
+
+  // Save to localStorage whenever user edits data (CRUD)
+  const saveData = useCallback((data: PortfolioData) => {
+    setPortfolioData(data)
+    localStorage.setItem(STORAGE_KEY + "_edited", JSON.stringify(data))
+  }, [])
+
+  const resetForm = () => {
+    setFormName("")
+    setFormCode("")
+    setFormQuantity("")
+    setFormAvgPrice("")
+  }
+
+  const handleAdd = () => {
+    if (!portfolioData || !formName || !formCode || !formQuantity || !formAvgPrice) return
+    const newData = { ...portfolioData, accounts: portfolioData.accounts.map((a, i) => {
+      if (i !== activeAccount) return a
+      return {
+        ...a,
+        stocks: [...a.stocks, {
+          name: formName,
+          code: formCode,
+          quantity: parseInt(formQuantity),
+          avg_price: parseInt(formAvgPrice),
+        }],
+      }
+    })}
+    saveData(newData)
+    setShowAddModal(false)
+    resetForm()
+  }
+
+  const handleEdit = () => {
+    if (!portfolioData || !editStock || !formQuantity || !formAvgPrice) return
+    const newData = { ...portfolioData, accounts: portfolioData.accounts.map((a, i) => {
+      if (i !== editStock.accountIdx) return a
+      return {
+        ...a,
+        stocks: a.stocks.map((s, j) => {
+          if (j !== editStock.stockIdx) return s
+          return {
+            ...s,
+            name: formName || s.name,
+            code: formCode || s.code,
+            quantity: parseInt(formQuantity),
+            avg_price: parseInt(formAvgPrice),
+          }
+        }),
+      }
+    })}
+    saveData(newData)
+    setEditStock(null)
+    resetForm()
+  }
+
+  const handleDelete = () => {
+    if (!portfolioData || !deleteConfirm) return
+    const newData = { ...portfolioData, accounts: portfolioData.accounts.map((a, i) => {
+      if (i !== deleteConfirm.accountIdx) return a
+      return {
+        ...a,
+        stocks: a.stocks.filter((_, j) => j !== deleteConfirm.stockIdx),
+      }
+    })}
+    saveData(newData)
+    setDeleteConfirm(null)
+  }
+
+  const openEditModal = (accountIdx: number, stockIdx: number, stock: Stock) => {
+    setEditStock({ accountIdx, stockIdx, stock })
+    setFormName(stock.name)
+    setFormCode(stock.code)
+    setFormQuantity(stock.quantity.toString())
+    setFormAvgPrice(stock.avg_price.toString())
+  }
+
+  const openAddModal = () => {
+    resetForm()
+    setShowAddModal(true)
+  }
+
+  if (!portfolioData) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-muted-foreground">
+            {language === "ko" ? "포트폴리오 로딩 중..." : "Loading portfolio..."}
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  // 총 계좌(-1)면 모든 계좌 통합, 개별이면 해당 계좌
+  const isAllAccounts = activeAccount === -1
+  const account: Account = isAllAccounts
+    ? {
+        name: language === "ko" ? "총 계좌" : "All Accounts",
+        type: language === "ko" ? "통합" : "Combined",
+        stocks: portfolioData.accounts.flatMap(a => a.stocks.map(s => ({ ...s, _account: a.name }))),
+      }
+    : portfolioData.accounts[activeAccount]
+
+  if (!account) {
+    setActiveAccount(-1)
+    return null
+  }
+
+  const totalInvested = account.stocks.reduce((sum, s) => sum + s.quantity * s.avg_price, 0)
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600">
+            <Wallet className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h2 className="text-xl font-bold">
+              {language === "ko" ? "포트폴리오 관리" : "Portfolio Management"}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              {language === "ko" ? "계좌별 보유 종목을 관리합니다" : "Manage holdings by account"}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Account Tabs: 총 계좌 + 개별 계좌 */}
+      <div className="flex gap-2">
+        {/* 총 계좌 탭 */}
+        <button
+          onClick={() => setActiveAccount(-1)}
+          className={`
+            flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-200
+            ${activeAccount === -1
+              ? "bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg shadow-amber-500/25"
+              : "bg-muted/50 text-muted-foreground hover:text-foreground hover:bg-muted"
+            }
+          `}
+        >
+          <span>{language === "ko" ? "총 계좌" : "All"}</span>
+          <Badge variant={activeAccount === -1 ? "secondary" : "outline"} className="text-[10px]">
+            {portfolioData.accounts.reduce((s, a) => s + a.stocks.length, 0)}{language === "ko" ? "종목" : " stocks"}
+          </Badge>
+        </button>
+        {/* 개별 계좌 탭 */}
+        {portfolioData.accounts.map((acc, idx) => (
+          <button
+            key={idx}
+            onClick={() => setActiveAccount(idx)}
+            className={`
+              flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-200
+              ${activeAccount === idx
+                ? "bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/25"
+                : "bg-muted/50 text-muted-foreground hover:text-foreground hover:bg-muted"
+              }
+            `}
+          >
+            <span>{acc.name}</span>
+            <Badge variant={activeAccount === idx ? "secondary" : "outline"} className="text-[10px]">
+              {acc.stocks.length}{language === "ko" ? "종목" : " stocks"}
+            </Badge>
+          </button>
+        ))}
+      </div>
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="pt-4">
+            <p className="text-sm text-muted-foreground">{language === "ko" ? "총 투자금" : "Total Invested"}</p>
+            <p className="text-2xl font-bold">{totalInvested.toLocaleString()}<span className="text-sm text-muted-foreground ml-1">{language === "ko" ? "원" : "KRW"}</span></p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-4">
+            <p className="text-sm text-muted-foreground">{language === "ko" ? "총 평가금" : "Total Value"}</p>
+            {(() => {
+              const totalValue = account.stocks.reduce((s, st) => s + (priceMap[st.code] ?? st.avg_price) * st.quantity, 0)
+              const totalReturn = totalInvested > 0 ? ((totalValue - totalInvested) / totalInvested) * 100 : 0
+              return (
+                <div>
+                  <p className="text-2xl font-bold">{totalValue.toLocaleString()}<span className="text-sm text-muted-foreground ml-1">{language === "ko" ? "원" : "KRW"}</span></p>
+                  <p className={`text-sm font-semibold ${totalReturn >= 0 ? "text-red-400" : "text-blue-400"}`}>
+                    {totalReturn >= 0 ? "+" : ""}{totalReturn.toFixed(1)}% ({((totalValue - totalInvested) >= 0 ? "+" : "")}{(totalValue - totalInvested).toLocaleString()})
+                  </p>
+                </div>
+              )
+            })()}
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-4">
+            <p className="text-sm text-muted-foreground">{language === "ko" ? "보유 종목 수" : "Holdings"}</p>
+            <p className="text-2xl font-bold">{account.stocks.length}<span className="text-sm text-muted-foreground ml-1">{language === "ko" ? "종목" : "stocks"}</span></p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-4">
+            <p className="text-sm text-muted-foreground">{language === "ko" ? "계좌 유형" : "Account Type"}</p>
+            <p className="text-2xl font-bold">{account.type ?? "-"}</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* 섹터별 비중 파이 차트 */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">{language === "ko" ? "섹터별 비중" : "Sector Allocation"}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {(() => {
+            // 섹터별 투자금 계산
+            const sectorMap: Record<string, number> = {}
+            account.stocks.forEach(s => {
+              const sector = s.sector || (language === "ko" ? "기타" : "Other")
+              const value = (priceMap[s.code] ?? s.avg_price) * s.quantity
+              sectorMap[sector] = (sectorMap[sector] || 0) + value
+            })
+            const totalValue = Object.values(sectorMap).reduce((a, b) => a + b, 0)
+            const sectors = Object.entries(sectorMap)
+              .map(([name, value]) => ({ name, value, pct: totalValue > 0 ? (value / totalValue) * 100 : 0 }))
+              .sort((a, b) => b.value - a.value)
+
+            // 파이 차트 색상
+            const PIE_COLORS = [
+              '#3b82f6', '#ef4444', '#22c55e', '#f59e0b', '#8b5cf6',
+              '#ec4899', '#06b6d4', '#f97316', '#14b8a6', '#6366f1',
+              '#84cc16', '#e11d48', '#0ea5e9', '#a855f7',
+            ]
+
+            // SVG 파이 차트 계산
+            let startAngle = 0
+            const slices = sectors.map((s, i) => {
+              const angle = (s.pct / 100) * 360
+              const endAngle = startAngle + angle
+              const largeArc = angle > 180 ? 1 : 0
+              const startRad = (startAngle - 90) * Math.PI / 180
+              const endRad = (endAngle - 90) * Math.PI / 180
+              const x1 = 100 + 80 * Math.cos(startRad)
+              const y1 = 100 + 80 * Math.sin(startRad)
+              const x2 = 100 + 80 * Math.cos(endRad)
+              const y2 = 100 + 80 * Math.sin(endRad)
+              const path = `M100,100 L${x1},${y1} A80,80 0 ${largeArc},1 ${x2},${y2} Z`
+              startAngle = endAngle
+              return { ...s, path, color: PIE_COLORS[i % PIE_COLORS.length] }
+            })
+
+            // 각 조각의 라벨 위치 계산 (조각 중심각)
+            let labelStart = 0
+            const slicesWithLabel = slices.map(s => {
+              const angle = (s.pct / 100) * 360
+              const midAngle = labelStart + angle / 2
+              const midRad = (midAngle - 90) * Math.PI / 180
+              const labelR = 63  // 라벨 위치 반지름
+              const lx = 100 + labelR * Math.cos(midRad)
+              const ly = 100 + labelR * Math.sin(midRad)
+              labelStart += angle
+              return { ...s, lx, ly }
+            })
+
+            return (
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                {/* SVG 파이 */}
+                <div className="shrink-0 relative group">
+                  <svg width="400" height="400" viewBox="0 0 200 200">
+                    {slicesWithLabel.map((s, i) => (
+                      <g key={s.name} className="cursor-pointer" style={{ transition: 'transform 0.2s' }}
+                        onMouseEnter={(e) => {
+                          const path = e.currentTarget.querySelector('path')
+                          if (path) path.style.transform = 'scale(1.05)'
+                          if (path) path.style.transformOrigin = '100px 100px'
+                          const info = document.getElementById('pie-hover-info')
+                          if (info) info.innerHTML = `<b>${s.name}</b><br/>${s.pct.toFixed(1)}% · ${s.value.toLocaleString()}원`
+                        }}
+                        onMouseLeave={(e) => {
+                          const path = e.currentTarget.querySelector('path')
+                          if (path) path.style.transform = 'scale(1)'
+                          const info = document.getElementById('pie-hover-info')
+                          if (info) info.innerHTML = `${language === "ko" ? "총 평가" : "Total"}<br/><b>${(totalValue / 100000000).toFixed(1)}억</b>`
+                        }}
+                        onClick={() => setFilterText(s.name)}
+                      >
+                        <path
+                          d={s.path}
+                          fill={s.color}
+                          stroke="#0f172a"
+                          strokeWidth="1"
+                          style={{ transition: 'transform 0.2s, filter 0.2s', filter: 'brightness(1)' }}
+                          onMouseEnter={(e) => { e.currentTarget.style.filter = 'brightness(1.3)' }}
+                          onMouseLeave={(e) => { e.currentTarget.style.filter = 'brightness(1)' }}
+                        />
+                        {/* 비율 텍스트 (5% 이상만 표시) */}
+                        {s.pct >= 5 && (
+                          <text
+                            x={s.lx}
+                            y={s.ly}
+                            textAnchor="middle"
+                            dominantBaseline="middle"
+                            className="fill-white font-bold pointer-events-none"
+                            style={{ fontSize: s.pct >= 15 ? '8px' : '6px', textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}
+                          >
+                            {s.pct.toFixed(0)}%
+                          </text>
+                        )}
+                      </g>
+                    ))}
+                    {/* 중앙 원 (도넛) + 호버 정보 */}
+                    <circle cx="100" cy="100" r="45" fill="#0f172a" />
+                    <foreignObject x="60" y="78" width="80" height="44">
+                      <div
+                        id="pie-hover-info"
+                        className="text-center text-foreground"
+                        style={{ fontSize: '10px', lineHeight: '1.4' }}
+                        dangerouslySetInnerHTML={{
+                          __html: `${language === "ko" ? "총 평가" : "Total"}<br/><b>${(totalValue / 100000000).toFixed(1)}억</b>`
+                        }}
+                      />
+                    </foreignObject>
+                  </svg>
+                </div>
+                {/* 범례 */}
+                <div className="flex-1 grid grid-cols-2 gap-0.5 w-full">
+                  {slices.map(s => (
+                    <div key={s.name} className="flex items-center gap-1.5 px-2 py-1 rounded-lg hover:bg-muted/30 transition-colors">
+                      <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: s.color }} />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-medium truncate">{s.name}</p>
+                        <p className="text-[10px] text-muted-foreground">{s.value.toLocaleString()}원</p>
+                      </div>
+                      <span className="text-xs font-bold shrink-0">{s.pct.toFixed(1)}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          })()}
+        </CardContent>
+      </Card>
+
+      {/* Holdings Table */}
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>{language === "ko" ? "보유 종목" : "Holdings"}</CardTitle>
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <Search className="absolute left-2.5 top-2.5 w-3.5 h-3.5 text-muted-foreground" />
+              <Input
+                placeholder={language === "ko" ? "종목 검색..." : "Search..."}
+                value={filterText}
+                onChange={(e) => setFilterText(e.target.value)}
+                className="pl-8 h-9 w-40 text-sm"
+              />
+            </div>
+            {!isAllAccounts && (
+              <Button onClick={openAddModal} size="sm" className="gap-1">
+                <Plus className="w-4 h-4" />
+                {language === "ko" ? "추가" : "Add"}
+              </Button>
+            )}
+          </div>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                {[
+                  { key: "name", label: language === "ko" ? "종목명" : "Name", align: "left" },
+                  { key: "code", label: language === "ko" ? "코드" : "Code", align: "left" },
+                  { key: "quantity", label: language === "ko" ? "수량" : "Qty", align: "right" },
+                  { key: "avg_price", label: language === "ko" ? "평단가" : "Avg Price", align: "right" },
+                  { key: "invested", label: language === "ko" ? "투자금" : "Invested", align: "right" },
+                  { key: "current", label: language === "ko" ? "현재가" : "Price", align: "right" },
+                  { key: "value", label: language === "ko" ? "평가금" : "Value", align: "right" },
+                  { key: "return", label: language === "ko" ? "수익률" : "Return", align: "right" },
+                ].map(col => (
+                  <TableHead
+                    key={col.key}
+                    className={`${col.align === "right" ? "text-right" : ""} cursor-pointer select-none hover:text-foreground transition-colors`}
+                    onClick={() => {
+                      if (sortKey === col.key) setSortAsc(!sortAsc)
+                      else { setSortKey(col.key); setSortAsc(col.key === "return" ? false : true) }
+                    }}
+                  >
+                    <span className="inline-flex items-center gap-1">
+                      {col.label}
+                      {sortKey === col.key ? (
+                        sortAsc ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                      ) : (
+                        <ArrowUpDown className="w-3 h-3 opacity-30" />
+                      )}
+                    </span>
+                  </TableHead>
+                ))}
+                <TableHead className="text-right">{language === "ko" ? "비중" : "Weight"}</TableHead>
+                {!isAllAccounts && <TableHead className="text-center">{language === "ko" ? "관리" : "Actions"}</TableHead>}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {account.stocks
+                .map((stock, idx) => ({ ...stock, _idx: idx }))
+                .filter(stock => {
+                  if (!filterText) return true
+                  const q = filterText.toLowerCase()
+                  return stock.name.toLowerCase().includes(q) || stock.code.includes(q) || (stock.sector ?? '').toLowerCase().includes(q)
+                })
+                .sort((a, b) => {
+                  const getVal = (s: typeof a) => {
+                    const cp = priceMap[s.code] ?? 0
+                    switch (sortKey) {
+                      case "name": return s.name
+                      case "code": return s.code
+                      case "quantity": return s.quantity
+                      case "avg_price": return s.avg_price
+                      case "invested": return s.quantity * s.avg_price
+                      case "current": return cp
+                      case "value": return cp * s.quantity
+                      case "return": return cp ? ((cp - s.avg_price) / s.avg_price) * 100 : -999
+                      default: return s.name
+                    }
+                  }
+                  const va = getVal(a), vb = getVal(b)
+                  if (typeof va === "string") return sortAsc ? va.localeCompare(vb as string) : (vb as string).localeCompare(va)
+                  return sortAsc ? (va as number) - (vb as number) : (vb as number) - (va as number)
+                })
+                .map((stock) => {
+                const idx = stock._idx
+                const invested = stock.quantity * stock.avg_price
+                const weight = totalInvested > 0 ? (invested / totalInvested) * 100 : 0
+                return (
+                  <TableRow key={`${stock.code}-${idx}`}>
+                    <TableCell>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="font-medium">{stock.name}</span>
+                        {stock.sector && (
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded-full border ${SECTOR_COLORS[stock.sector] ?? 'bg-muted text-muted-foreground border-border'}`}>
+                            {stock.sector}
+                          </span>
+                        )}
+                        {isAllAccounts && stock._account && (
+                          <span className="text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded">{stock._account}</span>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground text-xs">
+                      {(() => {
+                        const url = getNaverChartUrl(stock.code)
+                        return url ? (
+                          <a href={url} target="_blank" rel="noopener noreferrer" className="hover:underline hover:text-foreground cursor-pointer">
+                            {stock.code}
+                          </a>
+                        ) : (
+                          <span>{stock.code}</span>
+                        )
+                      })()}
+                    </TableCell>
+                    <TableCell className="text-right">{stock.quantity.toLocaleString()}</TableCell>
+                    <TableCell className="text-right">{stock.avg_price.toLocaleString()}</TableCell>
+                    <TableCell className="text-right">{invested.toLocaleString()}</TableCell>
+                    <TableCell className="text-right">
+                      {priceMap[stock.code]
+                        ? <span className="font-medium">{priceMap[stock.code].toLocaleString()}</span>
+                        : <span className="text-muted-foreground text-xs">-</span>
+                      }
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {priceMap[stock.code]
+                        ? <span className="font-medium">{(priceMap[stock.code] * stock.quantity).toLocaleString()}</span>
+                        : <span className="text-muted-foreground text-xs">-</span>
+                      }
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {priceMap[stock.code] ? (() => {
+                        const returnRate = ((priceMap[stock.code] - stock.avg_price) / stock.avg_price) * 100
+                        const profitAmount = (priceMap[stock.code] - stock.avg_price) * stock.quantity
+                        return (
+                          <div>
+                            <span className={`font-bold ${returnRate >= 0 ? "text-red-400" : "text-blue-400"}`}>
+                              {returnRate >= 0 ? "+" : ""}{returnRate.toFixed(1)}%
+                            </span>
+                            <p className={`text-[10px] ${profitAmount >= 0 ? "text-red-400/70" : "text-blue-400/70"}`}>
+                              {profitAmount >= 0 ? "+" : ""}{profitAmount.toLocaleString()}
+                            </p>
+                          </div>
+                        )
+                      })() : <span className="text-muted-foreground text-xs">-</span>}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Badge variant="outline" className="text-xs">
+                        {weight.toFixed(1)}%
+                      </Badge>
+                    </TableCell>
+                    {!isAllAccounts && (
+                      <TableCell className="text-center">
+                        <div className="flex items-center justify-center gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7"
+                            onClick={() => openEditModal(activeAccount, idx, stock)}
+                          >
+                            <Pencil className="w-3.5 h-3.5" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 text-destructive hover:text-destructive"
+                            onClick={() => setDeleteConfirm({ accountIdx: activeAccount, stockIdx: idx })}
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={4} className="font-bold">
+                  {language === "ko" ? "합계" : "Total"}
+                </TableCell>
+                <TableCell className="text-right font-bold">{totalInvested.toLocaleString()}</TableCell>
+                <TableCell className="text-right font-bold">100%</TableCell>
+                <TableCell />
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </CardContent>
+      </Card>
+
+      {/* Add Stock Modal */}
+      <Dialog open={showAddModal} onOpenChange={setShowAddModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{language === "ko" ? "종목 추가" : "Add Stock"}</DialogTitle>
+            <DialogDescription>
+              {language === "ko" ? "새로운 종목을 포트폴리오에 추가합니다." : "Add a new stock to your portfolio."}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label>{language === "ko" ? "종목명" : "Stock Name"}</Label>
+              <Input value={formName} onChange={(e) => setFormName(e.target.value)} placeholder={language === "ko" ? "예: 삼성전자" : "e.g. Samsung"} />
+            </div>
+            <div className="grid gap-2">
+              <Label>{language === "ko" ? "종목 코드" : "Stock Code"}</Label>
+              <Input value={formCode} onChange={(e) => setFormCode(e.target.value)} placeholder={language === "ko" ? "예: 005930" : "e.g. 005930"} />
+            </div>
+            <div className="grid gap-2">
+              <Label>{language === "ko" ? "수량" : "Quantity"}</Label>
+              <Input type="number" value={formQuantity} onChange={(e) => setFormQuantity(e.target.value)} placeholder="0" />
+            </div>
+            <div className="grid gap-2">
+              <Label>{language === "ko" ? "평균 단가" : "Average Price"}</Label>
+              <Input type="number" value={formAvgPrice} onChange={(e) => setFormAvgPrice(e.target.value)} placeholder="0" />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowAddModal(false)}>
+              {language === "ko" ? "취소" : "Cancel"}
+            </Button>
+            <Button onClick={handleAdd} disabled={!formName || !formCode || !formQuantity || !formAvgPrice}>
+              <Plus className="w-4 h-4 mr-1" />
+              {language === "ko" ? "추가" : "Add"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Stock Modal */}
+      <Dialog open={!!editStock} onOpenChange={(open) => { if (!open) { setEditStock(null); resetForm(); } }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{language === "ko" ? "종목 수정" : "Edit Stock"}</DialogTitle>
+            <DialogDescription>
+              {editStock?.stock.name} ({editStock?.stock.code})
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label>{language === "ko" ? "종목명" : "Stock Name"}</Label>
+              <Input value={formName} onChange={(e) => setFormName(e.target.value)} />
+            </div>
+            <div className="grid gap-2">
+              <Label>{language === "ko" ? "종목 코드" : "Stock Code"}</Label>
+              <Input value={formCode} onChange={(e) => setFormCode(e.target.value)} />
+            </div>
+            <div className="grid gap-2">
+              <Label>{language === "ko" ? "수량" : "Quantity"}</Label>
+              <Input type="number" value={formQuantity} onChange={(e) => setFormQuantity(e.target.value)} />
+            </div>
+            <div className="grid gap-2">
+              <Label>{language === "ko" ? "평균 단가" : "Average Price"}</Label>
+              <Input type="number" value={formAvgPrice} onChange={(e) => setFormAvgPrice(e.target.value)} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setEditStock(null); resetForm(); }}>
+              {language === "ko" ? "취소" : "Cancel"}
+            </Button>
+            <Button onClick={handleEdit} disabled={!formQuantity || !formAvgPrice}>
+              <Pencil className="w-4 h-4 mr-1" />
+              {language === "ko" ? "저장" : "Save"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation */}
+      <Dialog open={!!deleteConfirm} onOpenChange={(open) => { if (!open) setDeleteConfirm(null); }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{language === "ko" ? "종목 삭제" : "Delete Stock"}</DialogTitle>
+            <DialogDescription>
+              {deleteConfirm
+                ? language === "ko"
+                  ? `${portfolioData.accounts[deleteConfirm.accountIdx].stocks[deleteConfirm.stockIdx]?.name}을(를) 삭제하시겠습니까?`
+                  : `Are you sure you want to delete ${portfolioData.accounts[deleteConfirm.accountIdx].stocks[deleteConfirm.stockIdx]?.name}?`
+                : ""}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteConfirm(null)}>
+              {language === "ko" ? "취소" : "Cancel"}
+            </Button>
+            <Button variant="destructive" onClick={handleDelete}>
+              <Trash2 className="w-4 h-4 mr-1" />
+              {language === "ko" ? "삭제" : "Delete"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}

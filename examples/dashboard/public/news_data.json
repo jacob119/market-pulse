@@ -1,0 +1,762 @@
+{
+  "generated_at": "2026-04-05T13:33:22.394085",
+  "keywords": [
+    {
+      "word": "반도체",
+      "count": 85,
+      "category": "섹터",
+      "sentiment": "긍정",
+      "related": [
+        "K-반도체",
+        "수출",
+        "호황"
+      ]
+    },
+    {
+      "word": "중동",
+      "count": 78,
+      "category": "글로벌",
+      "sentiment": "부정",
+      "related": [
+        "이란",
+        "전쟁",
+        "유가"
+      ]
+    },
+    {
+      "word": "이란",
+      "count": 75,
+      "category": "글로벌",
+      "sentiment": "부정",
+      "related": [
+        "드론공격",
+        "트럼프",
+        "NATO"
+      ]
+    },
+    {
+      "word": "원전",
+      "count": 60,
+      "category": "섹터",
+      "sentiment": "긍정",
+      "related": [
+        "고리2호기",
+        "계속운전",
+        "에너지"
+      ]
+    },
+    {
+      "word": "에너지",
+      "count": 58,
+      "category": "섹터",
+      "sentiment": "중립",
+      "related": [
+        "한전",
+        "전력",
+        "두산"
+      ]
+    },
+    {
+      "word": "트럼프",
+      "count": 55,
+      "category": "글로벌",
+      "sentiment": "부정",
+      "related": [
+        "이란",
+        "NATO",
+        "동맹"
+      ]
+    },
+    {
+      "word": "수출",
+      "count": 52,
+      "category": "경제",
+      "sentiment": "긍정",
+      "related": [
+        "7000억달러",
+        "반도체",
+        "K-반도체"
+      ]
+    },
+    {
+      "word": "비트코인",
+      "count": 48,
+      "category": "글로벌",
+      "sentiment": "중립",
+      "related": [
+        "크립토",
+        "이란분쟁",
+        "유동성"
+      ]
+    },
+    {
+      "word": "부동산",
+      "count": 45,
+      "category": "이슈",
+      "sentiment": "중립",
+      "related": [
+        "공시가격",
+        "성동구",
+        "전세"
+      ]
+    },
+    {
+      "word": "PF",
+      "count": 42,
+      "category": "이슈",
+      "sentiment": "부정",
+      "related": [
+        "부실",
+        "연체율",
+        "정리"
+      ]
+    },
+    {
+      "word": "한전",
+      "count": 40,
+      "category": "종목",
+      "sentiment": "중립",
+      "related": [
+        "전력사",
+        "에너지감축",
+        "중동"
+      ]
+    },
+    {
+      "word": "KB금융",
+      "count": 35,
+      "category": "종목",
+      "sentiment": "긍정",
+      "related": [
+        "상권활성화지수",
+        "금융"
+      ]
+    },
+    {
+      "word": "두산",
+      "count": 33,
+      "category": "종목",
+      "sentiment": "긍정",
+      "related": [
+        "에너지",
+        "미래전략",
+        "우리은행"
+      ]
+    },
+    {
+      "word": "달러",
+      "count": 50,
+      "category": "경제",
+      "sentiment": "중립",
+      "related": [
+        "외화자산",
+        "환율",
+        "수출"
+      ]
+    },
+    {
+      "word": "유가",
+      "count": 45,
+      "category": "경제",
+      "sentiment": "부정",
+      "related": [
+        "중동",
+        "쿠웨이트",
+        "이란"
+      ]
+    },
+    {
+      "word": "GS칼텍스",
+      "count": 30,
+      "category": "종목",
+      "sentiment": "긍정",
+      "related": [
+        "베올리아",
+        "환경",
+        "ESG"
+      ]
+    },
+    {
+      "word": "신한카드",
+      "count": 25,
+      "category": "종목",
+      "sentiment": "부정",
+      "related": [
+        "부정채용",
+        "징역형"
+      ]
+    },
+    {
+      "word": "NATO",
+      "count": 35,
+      "category": "글로벌",
+      "sentiment": "부정",
+      "related": [
+        "트럼프",
+        "동맹",
+        "이란"
+      ]
+    },
+    {
+      "word": "탄소",
+      "count": 38,
+      "category": "이슈",
+      "sentiment": "중립",
+      "related": [
+        "EU",
+        "배출량",
+        "중소기업"
+      ]
+    },
+    {
+      "word": "넷플릭스",
+      "count": 30,
+      "category": "종목",
+      "sentiment": "중립",
+      "related": [
+        "쩐의전쟁",
+        "OTT",
+        "콘텐츠"
+      ]
+    },
+    {
+      "word": "공시가격",
+      "count": 28,
+      "category": "이슈",
+      "sentiment": "부정",
+      "related": [
+        "성동구",
+        "부동산",
+        "세금"
+      ]
+    },
+    {
+      "word": "ADT",
+      "count": 20,
+      "category": "종목",
+      "sentiment": "부정",
+      "related": [
+        "공정위",
+        "지식재산",
+        "제재"
+      ]
+    },
+    {
+      "word": "우리은행",
+      "count": 25,
+      "category": "종목",
+      "sentiment": "긍정",
+      "related": [
+        "두산",
+        "금융지원"
+      ]
+    },
+    {
+      "word": "플래닛랩스",
+      "count": 22,
+      "category": "종목",
+      "sentiment": "부정",
+      "related": [
+        "위성",
+        "미정부",
+        "중동"
+      ]
+    },
+    {
+      "word": "크립토",
+      "count": 30,
+      "category": "글로벌",
+      "sentiment": "중립",
+      "related": [
+        "비트코인",
+        "바이빗",
+        "폴리마켓"
+      ]
+    },
+    {
+      "word": "금융지원",
+      "count": 28,
+      "category": "이슈",
+      "sentiment": "긍정",
+      "related": [
+        "우리은행",
+        "두산",
+        "미래전략"
+      ]
+    },
+    {
+      "word": "ESG",
+      "count": 32,
+      "category": "이슈",
+      "sentiment": "긍정",
+      "related": [
+        "베올리아",
+        "탄소",
+        "환경"
+      ]
+    },
+    {
+      "word": "주식투자",
+      "count": 40,
+      "category": "유튜브",
+      "sentiment": "중립",
+      "related": [
+        "슈카월드",
+        "한방"
+      ]
+    },
+    {
+      "word": "쿠웨이트",
+      "count": 20,
+      "category": "글로벌",
+      "sentiment": "부정",
+      "related": [
+        "드론공격",
+        "유가",
+        "석유"
+      ]
+    },
+    {
+      "word": "고용",
+      "count": 22,
+      "category": "경제",
+      "sentiment": "중립",
+      "related": [
+        "노동부",
+        "공공부문",
+        "부정채용"
+      ]
+    }
+  ],
+  "headlines": [
+    {
+      "title": "“올해 일본도 넘는다”…‘K-반도체’ 호황에 작년 수출 첫 7000억 달러 돌파",
+      "source": "매일경제",
+      "time": "Sun, 05 Apr 2026",
+      "sentiment": "긍정",
+      "importance": 9,
+      "keywords": [
+        "반도체",
+        "수출",
+        "달러"
+      ],
+      "url": "https://www.mk.co.kr/news/economy/12008181",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "트럼프 \"지배력\" 주장하지만 이란 반격, 미군기 2대 격추",
+      "source": "Investing.com",
+      "time": "2026-04-05 04:06",
+      "sentiment": "부정",
+      "importance": 9,
+      "keywords": [
+        "트럼프",
+        "이란",
+        "중동"
+      ],
+      "url": "https://kr.investing.com/news/economy-news/article-1889247",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "이란 드론 공격으로 쿠웨이트석유공사 본사 화염에 휩싸여",
+      "source": "Investing.com",
+      "time": "2026-04-05 00:44",
+      "sentiment": "부정",
+      "importance": 9,
+      "keywords": [
+        "이란",
+        "유가",
+        "쿠웨이트"
+      ],
+      "url": "https://kr.investing.com/news/economy-news/article-1889236",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "고리2호기 35개월 만에 재가동…2030년까지 원전 10기 계속운전 추진 잇따라",
+      "source": "매일경제",
+      "time": "Sun, 05 Apr 2026",
+      "sentiment": "긍정",
+      "importance": 8,
+      "keywords": [
+        "원전",
+        "에너지"
+      ],
+      "url": "https://www.mk.co.kr/news/economy/12008177",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "트럼프, 이란 분쟁에 동참하지 않는 동맹국들에 NATO 미래 의문 제기",
+      "source": "Investing.com",
+      "time": "2026-04-04 23:58",
+      "sentiment": "부정",
+      "importance": 8,
+      "keywords": [
+        "트럼프",
+        "NATO",
+        "이란"
+      ],
+      "url": "https://kr.investing.com/news/economy-news/article-1889235",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "한전·전력사, 에너지 513GWh 감축 총력전...중동 정세 악화에 긴급 사장단 회의",
+      "source": "매일경제",
+      "time": "Sun, 05 Apr 2026",
+      "sentiment": "부정",
+      "importance": 7,
+      "keywords": [
+        "한전",
+        "에너지",
+        "중동"
+      ],
+      "url": "https://www.mk.co.kr/news/economy/12008179",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "부실 PF 18.5조 정리…연체율 3%대 하락에도 중동 변수 주시",
+      "source": "연합뉴스",
+      "time": "Sun, 5 Apr 2026 ",
+      "sentiment": "부정",
+      "importance": 7,
+      "keywords": [
+        "PF",
+        "중동"
+      ],
+      "url": "https://www.yna.co.kr/view/AKR20260404052600002",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "우리은행, 두산그룹 에너지 등 미래전략산업에 금융지원",
+      "source": "매일경제",
+      "time": "Sun, 05 Apr 2026",
+      "sentiment": "긍정",
+      "importance": 6,
+      "keywords": [
+        "우리은행",
+        "두산",
+        "에너지",
+        "금융지원"
+      ],
+      "url": "https://www.mk.co.kr/news/economy/12008157",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "EU 탄소장벽 본격화…중기부, 수출 中企 '배출량 관리' 지원",
+      "source": "연합뉴스",
+      "time": "Sun, 5 Apr 2026 ",
+      "sentiment": "중립",
+      "importance": 6,
+      "keywords": [
+        "탄소",
+        "ESG",
+        "수출"
+      ],
+      "url": "https://www.yna.co.kr/view/AKR20260404027000030",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "플래닛랩스, 미 정부 요청으로 중동 위성 이미지 제공 중단",
+      "source": "Investing.com",
+      "time": "2026-04-05 03:10",
+      "sentiment": "부정",
+      "importance": 6,
+      "keywords": [
+        "플래닛랩스",
+        "중동"
+      ],
+      "url": "https://kr.investing.com/news/economy-news/article-1889244",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "[슈카월드] \"이제 남은 길은 주식 한방 뿐\"",
+      "source": "YouTube 슈카월드",
+      "time": "2026-04-04",
+      "sentiment": "중립",
+      "importance": 5,
+      "keywords": [
+        "주식투자"
+      ],
+      "url": "https://www.youtube.com/watch?v=hUx5XifMZ7w",
+      "region": "KR",
+      "type": "youtube"
+    },
+    {
+      "title": "[슈카월드] 성동구 공시가격 +29%, 전국 1등 달성",
+      "source": "YouTube 슈카월드",
+      "time": "2026-04-03",
+      "sentiment": "부정",
+      "importance": 5,
+      "keywords": [
+        "공시가격",
+        "부동산"
+      ],
+      "url": "https://www.youtube.com/watch?v=9RYpCIboM_w",
+      "region": "KR",
+      "type": "youtube"
+    },
+    {
+      "title": "“달러 오르면 몇억씩 버는데”…신현송 외화자산 45억 보유 ‘이해충돌’ 논란",
+      "source": "매일경제",
+      "time": "Sun, 05 Apr 2026",
+      "sentiment": "부정",
+      "importance": 5,
+      "keywords": [
+        "달러",
+        "이해충돌"
+      ],
+      "url": "https://www.mk.co.kr/news/economy/12008174",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "GS칼텍스, 세계 1위 환경설루션기업 베올리아와 운영 혁신 제휴",
+      "source": "연합뉴스",
+      "time": "Sun, 5 Apr 2026 ",
+      "sentiment": "긍정",
+      "importance": 5,
+      "keywords": [
+        "GS칼텍스",
+        "ESG"
+      ],
+      "url": "https://www.yna.co.kr/view/AKR20260405024500003",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "BCA에 따르면 포트폴리오에 위험을 추가하지 말아야 하는 이유",
+      "source": "Investing.com",
+      "time": "2026-04-05 01:56",
+      "sentiment": "부정",
+      "importance": 5,
+      "keywords": [
+        "주식투자"
+      ],
+      "url": "https://kr.investing.com/news/economy-news/article-1889241",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "폴리마켓, 이란 전쟁 베팅 논란 후 \"구조 작전\" 베팅 중단",
+      "source": "Investing.com",
+      "time": "2026-04-05 01:13",
+      "sentiment": "부정",
+      "importance": 5,
+      "keywords": [
+        "이란",
+        "크립토"
+      ],
+      "url": "https://kr.investing.com/news/company-news/article-1889239",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "Bitcoin price today: muted above $66k with focus on Iran conflict, US jobs data",
+      "source": "Investing글로벌",
+      "time": "2026-04-04 08:49",
+      "sentiment": "부정",
+      "importance": 5,
+      "keywords": [
+        "비트코인",
+        "이란",
+        "크립토"
+      ],
+      "url": "https://www.investing.com/news/cryptocurrency-news/bitcoin-price-today-muted-above-66k-with-focus-on-iran-conflict-us-jobs-data-4596869",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "Bitcoin slips, drops under $67k as Trump threatens to hit Iran ‘extremely hard’",
+      "source": "Investing글로벌",
+      "time": "2026-04-02 21:52",
+      "sentiment": "부정",
+      "importance": 5,
+      "keywords": [
+        "비트코인",
+        "트럼프",
+        "이란",
+        "크립토"
+      ],
+      "url": "https://www.investing.com/news/cryptocurrency-news/bitcoin-slides-to-665k-as-trump-threatens-to-hit-iran-extremely-hard-4594610",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "[슈카월드] 넷플릭스 '쩐의 전쟁'을 시작한다.",
+      "source": "YouTube 슈카월드",
+      "time": "2026-04-02",
+      "sentiment": "중립",
+      "importance": 4,
+      "keywords": [
+        "넷플릭스"
+      ],
+      "url": "https://www.youtube.com/watch?v=DvNfk57ABlo",
+      "region": "KR",
+      "type": "youtube"
+    },
+    {
+      "title": "KB금융 ‘상권활성화지수’ 개발…“동네 상권 한 눈에”",
+      "source": "매일경제",
+      "time": "Sun, 05 Apr 2026",
+      "sentiment": "긍정",
+      "importance": 4,
+      "keywords": [
+        "KB금융",
+        "금융지원"
+      ],
+      "url": "https://www.mk.co.kr/news/economy/12008178",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "9명 중 8위가 4위로 …‘계열사 사장 딸 부정채용’ 전 신한카드 부사장 1심 징역형 집유",
+      "source": "매일경제",
+      "time": "Sun, 05 Apr 2026",
+      "sentiment": "부정",
+      "importance": 4,
+      "keywords": [
+        "신한카드",
+        "고용"
+      ],
+      "url": "https://www.mk.co.kr/news/economy/12008112",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "ADT '수급업자 지식재산 내 맘대로' 특약했다가 공정위 제재",
+      "source": "연합뉴스",
+      "time": "Sun, 5 Apr 2026 ",
+      "sentiment": "부정",
+      "importance": 4,
+      "keywords": [
+        "ADT"
+      ],
+      "url": "https://www.yna.co.kr/view/AKR20260404045100002",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "Bitcoin trades sideways during the long Easter weekend amid low liquidity",
+      "source": "Investing글로벌",
+      "time": "2026-04-04 09:26",
+      "sentiment": "중립",
+      "importance": 4,
+      "keywords": [
+        "비트코인",
+        "크립토"
+      ],
+      "url": "https://www.investing.com/news/cryptocurrency-news/bitcoin-trades-sideways-during-the-long-easter-weekend-amid-low-liquidity-4597531",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "Bitcoin kicks off April with slight gains as Trump says Iran asked for ceasefire",
+      "source": "Investing글로벌",
+      "time": "2026-04-01 21:28",
+      "sentiment": "긍정",
+      "importance": 4,
+      "keywords": [
+        "비트코인",
+        "이란",
+        "크립토"
+      ],
+      "url": "https://www.investing.com/news/cryptocurrency-news/bitcoin-rises-to-687k-as-trump-spurs-iran-deescalation-hopes-4592110",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "공공부문 부당 고용관행 개선…노동부, 익명 상담센터 운영",
+      "source": "연합뉴스",
+      "time": "Sun, 5 Apr 2026 ",
+      "sentiment": "중립",
+      "importance": 3,
+      "keywords": [
+        "고용"
+      ],
+      "url": "https://www.yna.co.kr/view/AKR20260404025100530",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "Nexgel Q4 실적, 수익 에상치보다 저조",
+      "source": "Investing.com",
+      "time": "2026-04-05 04:19",
+      "sentiment": "부정",
+      "importance": 3,
+      "keywords": [],
+      "url": "https://kr.investing.com/news/earnings/article-1889248",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "Bybit Releases 32nd Proof-of-Reserves Report, Maintaining Overcollateralized Positions Across Major Assets",
+      "source": "Investing글로벌",
+      "time": "2026-04-02 08:30",
+      "sentiment": "중립",
+      "importance": 3,
+      "keywords": [
+        "크립토"
+      ],
+      "url": "https://www.investing.com/news/cryptocurrency-news/bybit-releases-32nd-proofofreserves-report-maintaining-overcollateralized-positions-across-major-assets-4594815",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "\"모두의 창업 알린다\"…중기부, 캠퍼스투어 이벤트",
+      "source": "연합뉴스",
+      "time": "Sun, 5 Apr 2026 ",
+      "sentiment": "중립",
+      "importance": 2,
+      "keywords": [],
+      "url": "https://www.yna.co.kr/view/AKR20260403123400030",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "BTCC Exchange Named Official Regional Partner of the Argentine National Team",
+      "source": "Investing글로벌",
+      "time": "2026-04-02 13:30",
+      "sentiment": "중립",
+      "importance": 2,
+      "keywords": [
+        "크립토"
+      ],
+      "url": "https://www.investing.com/news/cryptocurrency-news/btcc-exchange-named-official-regional-partner-of-the-argentine-national-team-4595771",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "Licensed crypto services provider crypto4me simplifies cryptocurrency purchasing",
+      "source": "Investing글로벌",
+      "time": "2026-04-02 12:30",
+      "sentiment": "중립",
+      "importance": 2,
+      "keywords": [
+        "크립토"
+      ],
+      "url": "https://www.investing.com/news/cryptocurrency-news/licensed-crypto-services-provider-crypto4me-simplifies-cryptocurrency-purchasing-4595462",
+      "region": "KR",
+      "type": "news"
+    },
+    {
+      "title": "[부고] 강민구(밍글스 대표)씨 부친상",
+      "source": "연합뉴스",
+      "time": "Sun, 5 Apr 2026 ",
+      "sentiment": "중립",
+      "importance": 1,
+      "keywords": [],
+      "url": "https://www.yna.co.kr/view/AKR20260405023700034",
+      "region": "KR",
+      "type": "news"
+    }
+  ]
+}
