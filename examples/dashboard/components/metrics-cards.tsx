@@ -129,7 +129,7 @@ export function MetricsCards({
     },
     {
       label: t("metrics.simAvgHoldingDays"),
-      value: tradingHistoryCount > 0 ? `${Math.round(tradingHistoryAvgDays)}${t("common.days")}` : `-${t("common.days")}`,
+      value: tradingHistoryCount > 0 && !isNaN(tradingHistoryAvgDays) ? `${Math.round(tradingHistoryAvgDays)}${t("common.days")}` : `-`,
       change: tradingHistoryCount > 0
         ? `${tradingHistoryCount}${t("metrics.soldBasis")}`
         : t("metrics.waitingSell"),
@@ -143,8 +143,8 @@ export function MetricsCards({
     },
     {
       label: t("metrics.simCurrentProfit"),
-      value: formatPercent(summary.portfolio.total_profit || 0),
-      change: `${t("metrics.holding")} ${summary.portfolio.total_stocks || 0}${t("metrics.stocks")} (${t("metrics.avgProfit")} ${formatPercent(summary.portfolio.avg_profit_rate || 0)})`,
+      value: formatPercent(summary.portfolio.avg_profit_rate || 0),
+      change: `${t("metrics.holding")} ${summary.portfolio.total_stocks || 0}${t("metrics.stocks")} (${language === "ko" ? "수익금" : "P&L"} ${formatCurrency(summary.portfolio.total_profit || 0)})`,
       changeValue: `${t("metrics.slotUsage")} ${summary.portfolio.slot_usage ?? "-"}`,
       description: t("metrics.currentProfitDesc"),
       isPositive: (summary.portfolio.total_profit || 0) >= 0,
