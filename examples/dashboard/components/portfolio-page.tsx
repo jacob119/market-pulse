@@ -714,24 +714,28 @@ export function PortfolioPage() {
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            {/* 티커 입력 → 자동 조회 */}
+            {/* 티커 입력 + 조회 버튼 */}
             <div className="grid gap-2">
               <Label>{language === "ko" ? "종목 코드 (티커)" : "Stock Code (Ticker)"}</Label>
               <div className="flex gap-2">
                 <Input
                   value={formCode}
-                  onChange={(e) => {
-                    setFormCode(e.target.value)
-                    lookupTicker(e.target.value)
-                  }}
+                  onChange={(e) => setFormCode(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') lookupTicker(formCode) }}
                   placeholder={language === "ko" ? "예: 005930" : "e.g. 005930"}
                   className="flex-1"
                 />
-                {formLookupLoading && (
-                  <div className="flex items-center px-2">
+                <Button
+                  variant="secondary"
+                  onClick={() => lookupTicker(formCode)}
+                  disabled={!formCode || formCode.length < 5 || formLookupLoading}
+                >
+                  {formLookupLoading ? (
                     <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                  </div>
-                )}
+                  ) : (
+                    <>{language === "ko" ? "조회" : "Search"}</>
+                  )}
+                </Button>
               </div>
             </div>
 
