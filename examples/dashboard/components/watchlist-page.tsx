@@ -397,7 +397,7 @@ export function WatchlistPage({ watchlist, market = "KR" }: WatchlistPageProps) 
                       {upside !== null ? (
                         <span
                           className={`text-sm font-semibold ${
-                            upside > 0 ? "text-emerald-400" : "text-red-400"
+                            upside > 0 ? "text-red-400" : "text-blue-400"
                           }`}
                         >
                           {upside > 0 ? "+" : ""}

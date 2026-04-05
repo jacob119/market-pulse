@@ -391,7 +391,7 @@ export function AIDecisionsPage({ data, market = "KR" }: AIDecisionsPageProps) {
                         <div className="flex flex-col items-end">
                           <span
                             className={`text-sm font-semibold ${
-                              profitRate >= 0 ? "text-emerald-400" : "text-red-400"
+                              profitRate >= 0 ? "text-red-400" : "text-blue-400"
                             }`}
                           >
                             {formatPercent(profitRate)}
@@ -406,7 +406,7 @@ export function AIDecisionsPage({ data, market = "KR" }: AIDecisionsPageProps) {
                             return (
                               <span
                                 className={`text-xs ${
-                                  profitAmount >= 0 ? "text-emerald-400/70" : "text-red-400/70"
+                                  profitAmount >= 0 ? "text-red-400/70" : "text-blue-400/70"
                                 }`}
                               >
                                 ({profitAmount >= 0 ? "+" : ""}{formatCurrency(profitAmount)})
