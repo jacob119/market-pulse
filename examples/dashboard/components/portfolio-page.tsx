@@ -798,18 +798,55 @@ export function PortfolioPage() {
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
+            {/* 종목 코드 + 조회 버튼 */}
             <div className="grid gap-2">
-              <Label>{language === "ko" ? "종목명" : "Stock Name"}</Label>
-              <Input value={formName} onChange={(e) => setFormName(e.target.value)} />
+              <Label>{language === "ko" ? "종목 코드 (티커)" : "Stock Code (Ticker)"}</Label>
+              <div className="flex gap-2">
+                <Input
+                  value={formCode}
+                  onChange={(e) => setFormCode(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') lookupTicker(formCode) }}
+                  className="flex-1"
+                />
+                <Button
+                  variant="secondary"
+                  onClick={() => lookupTicker(formCode)}
+                  disabled={!formCode || formCode.length < 5 || formLookupLoading}
+                >
+                  {formLookupLoading ? (
+                    <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <>{language === "ko" ? "조회" : "Search"}</>
+                  )}
+                </Button>
+              </div>
             </div>
-            <div className="grid gap-2">
-              <Label>{language === "ko" ? "종목 코드" : "Stock Code"}</Label>
-              <Input value={formCode} onChange={(e) => setFormCode(e.target.value)} />
-            </div>
+
+            {/* 조회 결과 */}
+            {formName && (
+              <div className="p-3 rounded-lg bg-muted/50 border border-border/50">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-semibold text-foreground">{formName}</p>
+                    <p className="text-xs text-muted-foreground">{formCode}</p>
+                  </div>
+                  {formCurrentPrice && (
+                    <div className="text-right">
+                      <p className="text-xs text-muted-foreground">{language === "ko" ? "현재가" : "Current"}</p>
+                      <p className="font-bold text-foreground">{formCurrentPrice.toLocaleString()}{language === "ko" ? "원" : ""}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* 수량 */}
             <div className="grid gap-2">
               <Label>{language === "ko" ? "수량" : "Quantity"}</Label>
               <Input type="number" value={formQuantity} onChange={(e) => setFormQuantity(e.target.value)} />
             </div>
+
+            {/* 평균 단가 */}
             <div className="grid gap-2">
               <Label>{language === "ko" ? "평균 단가" : "Average Price"}</Label>
               <Input type="number" value={formAvgPrice} onChange={(e) => setFormAvgPrice(e.target.value)} />
