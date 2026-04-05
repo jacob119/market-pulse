@@ -1,6 +1,6 @@
 # MarketPulse 사용자 가이드
 
-> MarketPulse (PRISM-INSIGHT) 설치, 실행, 자동화 가이드
+> MarketPulse (MarketPulse) 설치, 실행, 자동화 가이드
 
 ---
 

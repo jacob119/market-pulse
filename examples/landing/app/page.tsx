@@ -216,7 +216,7 @@ python demo.py AAPL`
           <div className="mb-6">
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-4">
               <span className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-                PRISM
+                MarketPulse
               </span>
               <span className="text-zinc-400">-</span>
               <span className="text-zinc-100">INSIGHT</span>
@@ -364,7 +364,7 @@ python demo.py AAPL`
               WrksAI
             </a>
             {' '}- the AI assistant for professionals, proudly sponsors{' '}
-            <span className="text-zinc-200 font-semibold">PRISM-INSIGHT</span>
+            <span className="text-zinc-200 font-semibold">MarketPulse</span>
             {' '}- the AI assistant for investors.
           </p>
         </div>
@@ -457,7 +457,7 @@ python demo.py AAPL`
           <div className="text-center mb-12">
             <Badge className="mb-4 bg-zinc-800 text-zinc-300 border-zinc-700">Demo</Badge>
             <h2 className="text-4xl font-bold mb-4">See It In Action</h2>
-            <p className="text-zinc-500">Watch how PRISM-INSIGHT analyzes stocks in real-time</p>
+            <p className="text-zinc-500">Watch how MarketPulse analyzes stocks in real-time</p>
           </div>
 
           <div className="relative aspect-video rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800">
@@ -465,7 +465,7 @@ python demo.py AAPL`
               <div className="absolute inset-0 flex items-center justify-center bg-zinc-900">
                 <Image
                   src={`https://img.youtube.com/vi/LVOAdVCh1QE/maxresdefault.jpg`}
-                  alt="PRISM-INSIGHT Demo Video"
+                  alt="MarketPulse Demo Video"
                   fill
                   className="object-cover opacity-50"
                 />
@@ -479,7 +479,7 @@ python demo.py AAPL`
             ) : (
               <iframe
                 src="https://www.youtube.com/embed/LVOAdVCh1QE?autoplay=1"
-                title="PRISM-INSIGHT Demo"
+                title="MarketPulse Demo"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="absolute inset-0 w-full h-full"
@@ -560,7 +560,7 @@ python demo.py AAPL`
               <div className="relative bg-zinc-950 p-2">
                 <Image
                   src="/screenshots/dashboard_screenshot.png"
-                  alt="PRISM-INSIGHT Dashboard"
+                  alt="MarketPulse Dashboard"
                   width={800}
                   height={500}
                   className="w-full h-auto rounded-lg group-hover:scale-[1.02] transition-transform duration-500"
@@ -647,7 +647,7 @@ python demo.py AAPL`
 
           <h2 className="text-4xl font-bold mb-6">Support the Project</h2>
           <p className="text-zinc-500 mb-8 leading-relaxed">
-            PRISM-INSIGHT is free and open source. If it helps your trading,
+            MarketPulse is free and open source. If it helps your trading,
             consider supporting the development.
           </p>
 
@@ -684,7 +684,7 @@ python demo.py AAPL`
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-3">
               <span className="text-xl font-bold">
-                <span className="text-emerald-400">PRISM</span>
+                <span className="text-emerald-400">MarketPulse</span>
                 <span className="text-zinc-600">-</span>
                 <span className="text-zinc-400">INSIGHT</span>
               </span>

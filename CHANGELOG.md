@@ -9,7 +9,7 @@ Format: [Semantic Versioning](https://semver.org/) — MAJOR.MINOR.PATCH
 ## [1.0.0] - 2026-04-05
 
 ### Added
-- Investment Alpha 6인 에이전트 + PRISM 13 에이전트 통합
+- Investment Alpha 6인 에이전트 + MarketPulse 13 에이전트 통합
 - Claude Code CLI 기반 분석 체계 (Anthropic API 제거)
 - Next.js 대시보드 8개 탭 (대시보드, AI 보유분석, 거래내역, 관심종목, 인사이트, 포트폴리오, 뉴스, 리포트)
 - 실시간 시세 서버 (KIS REST API, 1분 갱신)

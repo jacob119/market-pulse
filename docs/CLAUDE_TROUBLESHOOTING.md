@@ -1,4 +1,4 @@
-# Troubleshooting - PRISM-INSIGHT
+# Troubleshooting - MarketPulse
 
 > **Note**: This is a detailed troubleshooting reference. For quick overview, see main [CLAUDE.md](../CLAUDE.md).
 

@@ -17,7 +17,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# Database file location - shared with main PRISM trading system
+# Database file location - shared with main MarketPulse trading system
 DB_FILE = Path(__file__).parent.parent / "stock_tracking_db.sqlite"
 
 

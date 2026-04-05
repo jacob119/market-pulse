@@ -17,7 +17,7 @@
                                     ↑
 daily_pipeline.py (21:00 crontab)
   ├── macro_pipeline → Investment Alpha 4인 전문가 + 종합
-  ├── stock_pipeline → PRISM 에이전트 종목 분석
+  ├── stock_pipeline → MarketPulse 에이전트 종목 분석
   ├── watchlist_analyzer → 보유+관심종목 통합 분석
   ├── realtime_server → KIS API 실시간 시세
   ├── news_crawler → RSS + YouTube + Claude Code

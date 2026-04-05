@@ -1,18 +1,18 @@
-# PRISM-INSIGHT 실시간 트레이딩 시그널 구독 가이드
+# MarketPulse 실시간 트레이딩 시그널 구독 가이드
 
-PRISM-INSIGHT의 AI 기반 실시간 매매 시그널을 GCP Pub/Sub을 통해 받아볼 수 있습니다.
+MarketPulse의 AI 기반 실시간 매매 시그널을 GCP Pub/Sub을 통해 받아볼 수 있습니다.
 
 ## 📋 개요
 
-- **무료 제공**: PRISM-INSIGHT 측 비용 없음
+- **무료 제공**: MarketPulse 측 비용 없음
 - **실시간 스트림**: 매수/매도 시그널을 즉시 수신
 - **커스터마이징 가능**: 받은 시그널로 자체 로직 구현 가능
 - **샘플 코드 제공**: Python 예제 코드 포함
 
 ## 💰 비용 안내
 
-### PRISM-INSIGHT 측
-- 무료 (Topic 운영 비용은 PRISM-INSIGHT가 부담)
+### MarketPulse 측
+- 무료 (Topic 운영 비용은 MarketPulse가 부담)
 
 ### 구독자 측 (본인 GCP 프로젝트)
 - **GCP Pub/Sub 요금**: https://cloud.google.com/pubsub/pricing
@@ -312,7 +312,7 @@ gcloud pubsub subscriptions update my-prism-signals \
 - 본 시그널은 AI 기반 분석 결과이며 투자 권유가 아닙니다.
 - 모든 투자 결정과 손실에 대한 책임은 전적으로 투자자 본인에게 있습니다.
 - 실제 매매 전 충분한 검토와 테스트를 권장합니다.
-- PRISM-INSIGHT는 시그널 정확성을 보장하지 않습니다.
+- MarketPulse는 시그널 정확성을 보장하지 않습니다.
 
 ## 🔄 업데이트 내역
 

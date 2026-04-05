@@ -83,7 +83,7 @@ def generate_archive_index(archive_dir: Path, date_str: str):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PRISM-ALPHA - {date_str}</title>
+<title>MarketPulse - {date_str}</title>
 <style>
 *{{box-sizing:border-box}}
 body{{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo',sans-serif;max-width:960px;margin:0 auto;padding:40px 20px;background:#0f172a;color:#e2e8f0}}
@@ -106,13 +106,13 @@ body{{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo',sans-se
   <a href="../../reports/macro/">최신 리포트</a>
 </div>
 <div class="header">
-  <div class="sub">PRISM-ALPHA</div>
+  <div class="sub">MarketPulse</div>
   <h1>{date_str} 리포트 아카이브</h1>
   <div class="meta">생성: {timestamp}</div>
 </div>
 {reports_html}
 <div class="footer">
-  <p>PRISM-ALPHA | Investment Alpha + PRISM-INSIGHT 통합</p>
+  <p>MarketPulse | Investment Alpha + MarketPulse 통합</p>
 </div>
 </body>
 </html>"""

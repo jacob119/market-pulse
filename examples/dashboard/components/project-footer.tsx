@@ -113,7 +113,7 @@ export function ProjectFooter() {
 
                   {/* Landing Page */}
                   <a
-                    href="https://prism-insight-landing.vercel.app"
+                    href="https://market-pulse-landing.vercel.app"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group flex items-center gap-3 p-3 rounded-lg bg-background/60 hover:bg-background/80 border border-border/50 hover:border-border transition-all duration-200 hover:shadow-md"

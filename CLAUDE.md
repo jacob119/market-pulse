@@ -11,7 +11,7 @@
 MarketPulse는 한국/미국 주식 시장의 AI 분석, 자동 매매, 실시간 대시보드를 통합한 투자 플랫폼입니다.
 
 - **MarketPulse 팀 (11인)**: 총괄 + 분석 6인 + 프론트엔드 + UX + QA + DevOps
-- **PRISM 분석 엔진**: 13개 전문 AI 에이전트 (기술, 수급, 재무, 산업, 뉴스, 시장, 전략, 거시, 요약, 평가, 번역, 매수, 매도)
+- **MarketPulse 분석 엔진**: 13개 전문 AI 에이전트 (기술, 수급, 재무, 산업, 뉴스, 시장, 전략, 거시, 요약, 평가, 번역, 매수, 매도)
 - **Claude Code CLI** (`claude -p`) 기반 실행 -- Claude API 직접 호출 금지
 
 ---
@@ -236,7 +236,7 @@ python weekly_insight_report.py --dry-run
 ```
 daily_pipeline.py (21:00 crontab)
   ├── macro_pipeline.py    → 거시경제 리포트 생성
-  ├── stock_pipeline.py    → 종목 분석 (PRISM 13 에이전트)
+  ├── stock_pipeline.py    → 종목 분석 (MarketPulse 13 에이전트)
   ├── realtime_server.py   → KIS API 실시간 시세
   ├── news_crawler.py      → RSS + YouTube + Claude Code 뉴스 수집
   ├── watchlist_analyzer.py → 보유+관심종목 분석

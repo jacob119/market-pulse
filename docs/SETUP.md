@@ -1,6 +1,6 @@
-# PRISM-INSIGHT Setup Guide
+# MarketPulse Setup Guide
 
-> Complete installation and configuration guide for PRISM-INSIGHT
+> Complete installation and configuration guide for MarketPulse
 
 **Language**: [English](SETUP.md) | [한국어](SETUP_ko.md)
 
@@ -49,7 +49,7 @@
 
 ## Quick Start with Docker
 
-Docker is the recommended way to run PRISM-INSIGHT in production environments.
+Docker is the recommended way to run MarketPulse in production environments.
 
 ### Step 1: Clone Repository
 
@@ -467,7 +467,7 @@ After successful setup:
 
 1. **Try the Quick Start**: Run `python stock_analysis_orchestrator.py --mode morning --no-telegram`
 2. **Explore the Dashboard**: Visit [analysis.stocksimulation.kr](https://analysis.stocksimulation.kr/)
-3. **Join the Community**: Subscribe to [Telegram Channel](https://t.me/prism_insight_global_en)
+3. **Join the Community**: Subscribe to [Telegram Channel](https://t.me/market_pulse_global_en)
 4. **Customize**: Modify agents in `cores/agents/` directory
 
 ---

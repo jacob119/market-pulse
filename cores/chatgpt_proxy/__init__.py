@@ -1,4 +1,4 @@
-"""ChatGPT OAuth Proxy for PRISM-INSIGHT.
+"""ChatGPT OAuth Proxy for MarketPulse.
 
 Routes OpenAI API calls through ChatGPT Plus/Pro subscription
 via an in-process aiohttp proxy server.

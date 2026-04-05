@@ -2,7 +2,7 @@
 Language Configuration Module
 
 This module provides centralized language configuration and translation management
-for the PRISM-INSIGHT stock analysis system.
+for the MarketPulse stock analysis system.
 
 Supported Languages:
 - Korean (ko): Default language
@@ -26,7 +26,7 @@ class LanguageConfig:
     Centralized language configuration and translation management
 
     This class provides all language-specific strings, templates, and formatting
-    used throughout the PRISM-INSIGHT system.
+    used throughout the MarketPulse system.
     """
 
     def __init__(self, language: Language = Language.KOREAN):
@@ -106,7 +106,7 @@ class LanguageConfig:
                 "disclaimer_not_recommendation": "This is not a leading channel and does not recommend buying/selling specific stocks.",
 
                 # Portfolio summary
-                "portfolio_summary_title": "📊 PRISM Simulator | Real-time Portfolio",
+                "portfolio_summary_title": "📊 MarketPulse Simulator | Real-time Portfolio",
                 "current_holdings": "Current Holdings",
                 "best_performer": "Best Performer",
                 "worst_performer": "Worst Performer",

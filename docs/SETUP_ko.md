@@ -1,6 +1,6 @@
-# PRISM-INSIGHT 설치 가이드
+# MarketPulse 설치 가이드
 
-> PRISM-INSIGHT의 완전한 설치 및 설정 가이드
+> MarketPulse의 완전한 설치 및 설정 가이드
 
 **언어**: [English](SETUP.md) | [한국어](SETUP_ko.md)
 
@@ -49,7 +49,7 @@
 
 ## Docker로 빠른 시작
 
-Docker는 프로덕션 환경에서 PRISM-INSIGHT를 실행하는 권장 방법입니다.
+Docker는 프로덕션 환경에서 MarketPulse를 실행하는 권장 방법입니다.
 
 ### 1단계: 저장소 클론
 

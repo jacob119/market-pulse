@@ -127,4 +127,4 @@ market-pulse/
 
 ## 참고
 
-- 원본: PRISM-INSIGHT (dragon1086) — fork 후 MarketPulse로 확장 개발
+- 원본: MarketPulse (dragon1086) — fork 후 MarketPulse로 확장 개발

@@ -47,7 +47,7 @@
 9. 텔레그램 채널에 포트폴리오 상태 메시지 발송
 10. 웹 대시보드를 통한 시각화
 
-⚠️ **실제 매매 연동이 아닌 시뮬레이션**입니다. PRISM-INSIGHT의 실제 계좌와 구분되도록 별도 테이블(`jeoningu_trades`)로 관리합니다.
+⚠️ **실제 매매 연동이 아닌 시뮬레이션**입니다. MarketPulse의 실제 계좌와 구분되도록 별도 테이블(`jeoningu_trades`)로 관리합니다.
 
 **핵심 전략**:
 - **전액 투자 (All-in)**: 매수 시 가용 잔액 100% 투자
@@ -116,7 +116,7 @@
 
 ```
 market-pulse/
-├── stock_tracking_db.sqlite     # 통합 SQLite DB (PRISM-INSIGHT 메인 DB)
+├── stock_tracking_db.sqlite     # 통합 SQLite DB (MarketPulse 메인 DB)
 └── events/
     ├── jeoningu_trading.py          # 메인 스크립트
     ├── jeoningu_trading_db.py       # SQLite 데이터베이스 관리
@@ -143,7 +143,7 @@ market-pulse/
 
 ### 데이터베이스 테이블
 
-**주의**: PRISM-INSIGHT 메인 데이터베이스(`stock_tracking_db.sqlite`)에 통합되어 있습니다.
+**주의**: MarketPulse 메인 데이터베이스(`stock_tracking_db.sqlite`)에 통합되어 있습니다.
 
 #### 단일 통합 테이블 설계
 
@@ -315,7 +315,7 @@ crontab -e
 
 ### 통합 데이터베이스 설계
 
-전인구 시뮬레이션은 PRISM-INSIGHT 메인 데이터베이스(`stock_tracking_db.sqlite`)에 **통합**되어 있습니다.
+전인구 시뮬레이션은 MarketPulse 메인 데이터베이스(`stock_tracking_db.sqlite`)에 **통합**되어 있습니다.
 
 **장점**:
 - 실제 거래 이력과 시뮬레이션 이력이 물리적으로 분리됨
@@ -712,7 +712,7 @@ python events/jeoningu_trading_db.py
 
 ### 라이선스
 
-본 시스템은 PRISM-INSIGHT 프로젝트의 일부로, 동일한 라이선스를 따릅니다.
+본 시스템은 MarketPulse 프로젝트의 일부로, 동일한 라이선스를 따릅니다.
 
 ### 면책 조항
 
@@ -727,4 +727,4 @@ python events/jeoningu_trading_db.py
 
 **Version**: 2.0
 **Last Updated**: 2025-11-23
-**Maintainer**: PRISM-INSIGHT Development Team
+**Maintainer**: MarketPulse Development Team

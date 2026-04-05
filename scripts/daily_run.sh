@@ -1,5 +1,5 @@
 #!/bin/bash
-# PRISM-ALPHA + MarketPulse 일일 파이프라인 실행 스크립트
+# MarketPulse + MarketPulse 일일 파이프라인 실행 스크립트
 # 사용: ./scripts/daily_run.sh [macro|stocks|all]
 # all 모드: 매크로분석 + 종목분석 + HTML생성 + 아카이브 + 대시보드 갱신(시세/뉴스/관심종목)
 
@@ -10,7 +10,7 @@ VENV="${WORK_DIR}/.venv/bin/activate"
 
 mkdir -p "${LOG_DIR}"
 
-echo "=== PRISM-ALPHA 파이프라인 시작: $(date '+%Y-%m-%d %H:%M:%S KST') ===" >> "${LOG_FILE}"
+echo "=== MarketPulse 파이프라인 시작: $(date '+%Y-%m-%d %H:%M:%S KST') ===" >> "${LOG_FILE}"
 
 cd "${WORK_DIR}" && source "${VENV}"
 

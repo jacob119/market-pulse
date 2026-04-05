@@ -1,4 +1,4 @@
-# AI 에이전트 시스템 - PRISM-INSIGHT
+# AI 에이전트 시스템 - MarketPulse
 
 > **참고**: 이 문서는 AI 에이전트 시스템의 상세 참조 문서입니다. 간략한 개요는 메인 [CLAUDE.md](../CLAUDE.md)를 참조하세요.
 >

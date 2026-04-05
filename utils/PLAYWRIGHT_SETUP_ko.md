@@ -2,7 +2,7 @@
 
 ## 🎯 모든 환경에서 작동하는 설치 방법
 
-PRISM-INSIGHT는 PDF 생성을 위해 Playwright (Chromium 브라우저)를 사용합니다.
+MarketPulse는 PDF 생성을 위해 Playwright (Chromium 브라우저)를 사용합니다.
 
 ---
 

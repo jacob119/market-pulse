@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # =============================================================================
-# PRISM-INSIGHT 간편 Crontab 설정 스크립트
+# MarketPulse 간편 Crontab 설정 스크립트
 # =============================================================================
 # 최소한의 설정으로 빠르게 crontab을 구성하는 스크립트입니다.
 # =============================================================================
@@ -11,7 +11,7 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-echo "🚀 PRISM-INSIGHT Crontab 빠른 설정"
+echo "🚀 MarketPulse Crontab 빠른 설정"
 echo "=================================="
 
 # 현재 디렉토리를 프로젝트 경로로 설정
@@ -42,10 +42,10 @@ else
     touch "$TEMP_CRON"
 fi
 
-# PRISM-INSIGHT 스케줄 추가
+# MarketPulse 스케줄 추가
 cat >> "$TEMP_CRON" << EOF
 
-# === PRISM-INSIGHT 자동 실행 스케줄 ===
+# === MarketPulse 자동 실행 스케줄 ===
 # 오전 9시 30분 - 오전 분석 (월-금)
 30 9 * * 1-5 cd $PROJECT_DIR && $PYTHON_CMD stock_analysis_orchestrator.py --mode morning >> $PROJECT_DIR/logs/morning.log 2>&1
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-PRISM-INSIGHT Trading Signal Subscriber (Auto-Trading Integration)
+MarketPulse Trading Signal Subscriber (Auto-Trading Integration)
 
-Running this script will receive buy/sell signals published by PRISM-INSIGHT
+Running this script will receive buy/sell signals published by MarketPulse
 in real-time and execute actual auto-trading.
 
 Usage:
@@ -156,7 +156,7 @@ async def execute_sell_trade(ticker: str, company_name: str, logger: logging.Log
 
 
 def main():
-    parser = argparse.ArgumentParser(description="PRISM-INSIGHT Trading Signal Subscriber (Auto-Trading Integration)")
+    parser = argparse.ArgumentParser(description="MarketPulse Trading Signal Subscriber (Auto-Trading Integration)")
     parser.add_argument(
         "--from-beginning",
         action="store_true",

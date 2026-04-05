@@ -1,6 +1,6 @@
 """
 Daily Pipeline — 통합 일일 분석 파이프라인
-Investment Alpha 매크로 + PRISM 종목 분석 + 아카이브
+Investment Alpha 매크로 + MarketPulse 종목 분석 + 아카이브
 """
 
 import asyncio
@@ -40,7 +40,7 @@ async def run_daily(
     start = time.time()
 
     logger.info("=" * 60)
-    logger.info(f"PRISM-ALPHA 일일 파이프라인 시작 ({date})")
+    logger.info(f"MarketPulse 일일 파이프라인 시작 ({date})")
     logger.info("=" * 60)
 
     results = {"macro": {}, "stocks": {}}
@@ -54,7 +54,7 @@ async def run_daily(
         except Exception as e:
             logger.error(f"매크로 분석 실패: {e}")
 
-    # Phase 2: 종목 분석 (PRISM 에이전트)
+    # Phase 2: 종목 분석 (MarketPulse 에이전트)
     if not skip_stocks and stocks:
         logger.info(f"\n--- Phase 2: 종목 분석 ({len(stocks)}개) ---")
         for code, name in stocks:

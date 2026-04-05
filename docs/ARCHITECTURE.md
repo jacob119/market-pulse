@@ -1,6 +1,6 @@
 # MarketPulse 아키텍처 문서
 
-> **MarketPulse (PRISM-INSIGHT)**: AI 기반 한국/미국 주식 분석 + 자동 매매 + 실시간 투자 대시보드
+> **MarketPulse (MarketPulse)**: AI 기반 한국/미국 주식 분석 + 자동 매매 + 실시간 투자 대시보드
 
 ---
 
@@ -23,7 +23,7 @@ graph TB
         HAIKU[Claude Haiku 4]
     end
 
-    subgraph Core["cores/ -- PRISM 분석 엔진"]
+    subgraph Core["cores/ -- MarketPulse 분석 엔진"]
         AGENTS[11개 전문 에이전트]
         ANALYSIS[analysis.py<br/>오케스트레이션]
         LLM[llm_client.py<br/>Claude CLI 래퍼]
@@ -117,7 +117,7 @@ graph TB
 
 ### 2.1 `cores/` -- AI 분석 엔진
 
-PRISM 분석의 핵심 모듈로, AI 에이전트가 종목을 분석합니다.
+MarketPulse 분석의 핵심 모듈로, AI 에이전트가 종목을 분석합니다.
 
 | 파일 | 역할 |
 |------|------|
@@ -131,7 +131,7 @@ PRISM 분석의 핵심 모듈로, AI 에이전트가 종목을 분석합니다.
 | `language_config.py` | 다국어 설정 |
 | `main.py` | 메인 진입점 |
 
-#### `cores/agents/` -- PRISM 에이전트 (11개)
+#### `cores/agents/` -- MarketPulse 에이전트 (11개)
 
 | 파일 | 역할 |
 |------|------|
@@ -167,7 +167,7 @@ PRISM 분석의 핵심 모듈로, AI 에이전트가 종목을 분석합니다.
 |------|------|----------|
 | `daily_pipeline.py` | 통합 일일 파이프라인 (Phase 1~5: 매크로 -> 종목 -> HTML -> 아카이브 -> 대시보드) | crontab |
 | `macro_pipeline.py` | Investment Alpha 4인 전문가 병렬 + 종합 분석가 순차 | daily_pipeline에서 호출 |
-| `stock_pipeline.py` | PRISM 6인 에이전트 병렬 분석 (기술적/투자자/재무/뉴스/시장 + 전략가) | daily_pipeline에서 호출 |
+| `stock_pipeline.py` | MarketPulse 6인 에이전트 병렬 분석 (기술적/투자자/재무/뉴스/시장 + 전략가) | daily_pipeline에서 호출 |
 | `news_crawler.py` | RSS 7개 + YouTube 7개 크롤링 + Claude AI 키워드/감정 분석 | 5분마다 (realtime.sh) |
 | `news_analyzer.py` | Claude API 직접 호출 뉴스 키워드 분석 (대체 방식) | 필요 시 |
 | `realtime_server.py` | KIS REST API 실시간 시세 조회 -> JSON 갱신 | 1분마다 (realtime.sh) |
@@ -211,7 +211,7 @@ flowchart LR
     VALIDATE --> DAILY["daily_pipeline.py"]
 
     DAILY --> MACRO["Phase 1: macro_pipeline.py<br/>Investment Alpha 4인 전문가"]
-    DAILY --> STOCK["Phase 2: stock_pipeline.py<br/>PRISM 에이전트"]
+    DAILY --> STOCK["Phase 2: stock_pipeline.py<br/>MarketPulse 에이전트"]
     DAILY --> HTML["Phase 3: pandoc<br/>MD -> HTML 변환"]
     DAILY --> ARCH["Phase 4: archive_pipeline.py<br/>날짜별 아카이브"]
     DAILY --> DASH["Phase 5: 대시보드 갱신"]
@@ -335,7 +335,7 @@ prism-alpha/
 │   │   ├── api_translator.py
 │   │   ├── token_manager.py
 │   │   └── constants.py
-│   └── agents/                         # PRISM 에이전트 (11개)
+│   └── agents/                         # MarketPulse 에이전트 (11개)
 │       ├── stock_price_agents.py       #   기술분석 + 수급분석
 │       ├── company_info_agents.py      #   재무분석 + 산업분석
 │       ├── news_strategy_agents.py     #   뉴스분석 + 투자전략
@@ -352,7 +352,7 @@ prism-alpha/
 │   ├── __init__.py
 │   ├── daily_pipeline.py               # 통합 일일 파이프라인 (Phase 1~5)
 │   ├── macro_pipeline.py               # 매크로 분석 (Investment Alpha)
-│   ├── stock_pipeline.py               # 종목 분석 (PRISM 6인 에이전트)
+│   ├── stock_pipeline.py               # 종목 분석 (MarketPulse 6인 에이전트)
 │   ├── realtime_server.py              # KIS API 실시간 시세 서버
 │   ├── news_crawler.py                 # RSS + YouTube 크롤링 + AI 분석
 │   ├── news_analyzer.py                # 뉴스 심층 분석
@@ -501,7 +501,7 @@ flowchart TD
 - **실행 방식**: `macro_pipeline.py` -> `AgentRunner` -> `LLMClient` -> `claude -p`
 - **산출물**: `reports/macro/` 디렉토리에 MD + HTML 리포트
 
-### 6.2 PRISM 종목 분석 에이전트
+### 6.2 MarketPulse 종목 분석 에이전트
 
 `stock_pipeline.py`에서 5개 에이전트 병렬 분석 + 전략가 종합을 실행합니다.
 

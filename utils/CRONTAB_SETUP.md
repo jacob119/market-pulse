@@ -1,9 +1,9 @@
-# 📅 PRISM-INSIGHT Crontab Setup Guide
+# 📅 MarketPulse Crontab Setup Guide
 
 > 📖 [한국어 문서](CRONTAB_SETUP_ko.md)
 
 ## Overview
-PRISM-INSIGHT uses crontab to automate stock market analysis. This document explains how to set up automatic execution schedules on your system.
+MarketPulse uses crontab to automate stock market analysis. This document explains how to set up automatic execution schedules on your system.
 
 ## 🚀 Quick Start
 
@@ -331,7 +331,7 @@ done
 ```bash
 # Email notification on error
 MAILTO=your-email@example.com
-30 9 * * 1-5 /path/to/script.py || echo "Morning analysis failed" | mail -s "PRISM-INSIGHT Error" $MAILTO
+30 9 * * 1-5 /path/to/script.py || echo "Morning analysis failed" | mail -s "MarketPulse Error" $MAILTO
 ```
 
 ### 3. **Health Check**

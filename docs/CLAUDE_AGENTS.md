@@ -1,4 +1,4 @@
-# AI Agent System - PRISM-INSIGHT
+# AI Agent System - MarketPulse
 
 > **Note**: This is a detailed reference for the AI Agent System. For quick overview, see main [CLAUDE.md](../CLAUDE.md).
 >

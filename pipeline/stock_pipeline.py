@@ -1,5 +1,5 @@
 """
-Stock Pipeline — PRISM 종목 분석 파이프라인
+Stock Pipeline — MarketPulse 종목 분석 파이프라인
 mcp-agent 없이 Claude API 직접 호출로 종목 심층 분석
 """
 
@@ -17,7 +17,7 @@ from cores.agent_runner import AgentTask, AgentRunner
 
 logger = logging.getLogger(__name__)
 
-# PRISM 에이전트 instruction (cores/agents/*.py에서 추출한 핵심 프롬프트)
+# MarketPulse 에이전트 instruction (cores/agents/*.py에서 추출한 핵심 프롬프트)
 TECHNICAL_ANALYST_PROMPT = """당신은 한국 주식시장 전문 기술적 분석가입니다.
 
 주어진 OHLCV 데이터를 분석하여 다음을 포함한 기술적 분석 보고서를 작성하세요:

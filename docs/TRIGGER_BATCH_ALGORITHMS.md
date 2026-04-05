@@ -663,4 +663,4 @@ python trigger_batch.py afternoon DEBUG
 
 **Document Version**: 4.0
 **Last Updated**: 2026-03-11
-**Author**: PRISM-INSIGHT Development Team
+**Author**: MarketPulse Development Team

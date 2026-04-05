@@ -68,7 +68,7 @@
 
 - Recharts 기반 시계열 차트
 - KOSPI/KOSDAQ 지수 추이
-- PRISM 시뮬레이터 수익률 그래프
+- MarketPulse 시뮬레이터 수익률 그래프
 
 ### 1.7 운영 비용 카드 (`operating-costs-card.tsx`)
 

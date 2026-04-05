@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-PRISM-INSIGHT Trading Signal Subscriber (GCP Pub/Sub Auto-Trading Integration)
+MarketPulse Trading Signal Subscriber (GCP Pub/Sub Auto-Trading Integration)
 
-Running this script will receive buy/sell signals published by PRISM-INSIGHT
+Running this script will receive buy/sell signals published by MarketPulse
 in real-time via GCP Pub/Sub and execute actual auto-trading.
 
 Supported Markets:
@@ -594,7 +594,7 @@ async def execute_us_sell_trade(ticker: str, company_name: str, logger: logging.
 
 
 def main():
-    parser = argparse.ArgumentParser(description="PRISM-INSIGHT GCP Pub/Sub Trading Signal Subscriber")
+    parser = argparse.ArgumentParser(description="MarketPulse GCP Pub/Sub Trading Signal Subscriber")
     parser.add_argument(
         "--project-id",
         default=os.environ.get("GCP_PROJECT_ID"),

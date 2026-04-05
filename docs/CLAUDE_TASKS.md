@@ -1,4 +1,4 @@
-# Common Tasks - PRISM-INSIGHT
+# Common Tasks - MarketPulse
 
 > **Note**: This is a detailed task reference. For quick overview, see main [CLAUDE.md](../CLAUDE.md).
 
@@ -150,7 +150,7 @@ REPORT_TEMPLATE = """
 # {company_name} ({company_code}) Investment Analysis Report
 
 **Analysis Date**: {reference_date}
-**Analyst**: PRISM-INSIGHT AI Agent System
+**Analyst**: MarketPulse AI Agent System
 **Language**: {language}
 
 ---
