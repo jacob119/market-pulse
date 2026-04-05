@@ -1,8 +1,8 @@
 # CLAUDE.md - MarketPulse 프로젝트 가이드
 
 > **MarketPulse**: AI 기반 주식 분석 + 투자 대시보드
-> Investment Alpha 팀 (6인 에이전트) + PRISM 종목 분석 통합
-> Claude Code CLI 기반 (API 크레딧 불필요)
+> MarketPulse 팀 (10인 에이전트) = 분석 6 + 개발 2 + 품질 1 + 총괄 1
+> Claude Code CLI 기반 (API 크레딧 불필요) · 병렬 실행 최대 2개
 
 ---
 
@@ -10,7 +10,7 @@
 
 MarketPulse는 한국/미국 주식 시장의 AI 분석, 자동 매매, 실시간 대시보드를 통합한 투자 플랫폼입니다.
 
-- **Investment Alpha 팀**: 거시경제, 원자재, 주식, 부동산, 종합분석가, 월별 리포트 작성자 6인 에이전트
+- **MarketPulse 팀 (10인)**: 분석 6인 + 프론트엔드 + UX + QA + 솔루션 아키텍트
 - **PRISM 분석 엔진**: 13개 전문 AI 에이전트 (기술, 수급, 재무, 산업, 뉴스, 시장, 전략, 거시, 요약, 평가, 번역, 매수, 매도)
 - **Claude Code CLI** (`claude -p`) 기반 실행 -- Claude API 직접 호출 금지
 
