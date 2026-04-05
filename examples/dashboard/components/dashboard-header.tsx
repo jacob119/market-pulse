@@ -49,12 +49,24 @@ export function DashboardHeader({ activeTab, onTabChange, lastUpdated, market = 
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-primary via-purple-600 to-blue-600">
-              <TrendingUp className="w-6 h-6 text-white" />
+            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500/20 to-red-500/20 border border-amber-500/30">
+              <svg width="24" height="24" viewBox="0 0 128 128" className="shrink-0">
+                <polygon points="64,18 100,52 64,108 28,52" fill="none" stroke="url(#headerGrad)" strokeWidth="5" strokeLinejoin="round"/>
+                <polyline points="30,65 52,50 64,42 76,55 98,65" fill="none" stroke="#f59e0b" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round">
+                  <animate attributeName="strokeWidth" values="5;7;5" dur="1.2s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="0.8;1;0.8" dur="1.2s" repeatCount="indefinite"/>
+                </polyline>
+                <defs>
+                  <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style={{stopColor:'#f59e0b'}}/>
+                    <stop offset="100%" style={{stopColor:'#ef4444'}}/>
+                  </linearGradient>
+                </defs>
+              </svg>
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-xl font-bold bg-gradient-to-r from-primary via-purple-600 to-blue-600 bg-clip-text text-transparent">
+                <h1 className="text-xl font-bold bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 bg-clip-text text-transparent">
                   MarketPulse
                 </h1>
                 <TooltipProvider>

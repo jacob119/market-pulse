@@ -1,4 +1,34 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" rx="20" fill="#0f172a"/>
-  <text x="50" y="68" font-size="60" text-anchor="middle" font-family="Arial">💹</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="gC" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#ef4444"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="#0f172a"/>
+  <rect x="4" y="4" width="120" height="120" rx="24" fill="none" stroke="url(#gC)" stroke-width="2" opacity="0.3"/>
+  <!-- Diamond -->
+  <polygon points="64,18 100,52 64,108 28,52" fill="none" stroke="url(#gC)" stroke-width="3" stroke-linejoin="round"/>
+  <line x1="28" y1="52" x2="100" y2="52" stroke="url(#gC)" stroke-width="2" opacity="0.5"/>
+  <line x1="64" y1="18" x2="46" y2="52" stroke="url(#gC)" stroke-width="1.5" opacity="0.3"/>
+  <line x1="64" y1="18" x2="82" y2="52" stroke="url(#gC)" stroke-width="1.5" opacity="0.3"/>
+  <line x1="46" y1="52" x2="64" y2="108" stroke="url(#gC)" stroke-width="1.5" opacity="0.3"/>
+  <line x1="82" y1="52" x2="64" y2="108" stroke="url(#gC)" stroke-width="1.5" opacity="0.3"/>
+  <!-- Pulse line with heartbeat animation -->
+  <polyline points="30,65 45,65 52,50 58,75 64,42 70,78 76,55 84,65 98,65" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.8">
+    <animate attributeName="stroke-width" values="3;4.5;3" dur="1.2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.8;1;0.8" dur="1.2s" repeatCount="indefinite"/>
+  </polyline>
+  <!-- Pulse glow -->
+  <polyline points="30,65 45,65 52,50 58,75 64,42 70,78 76,55 84,65 98,65" fill="none" stroke="#f59e0b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0">
+    <animate attributeName="opacity" values="0;0.3;0" dur="1.2s" repeatCount="indefinite"/>
+  </polyline>
+  <!-- Sparkle -->
+  <circle cx="98" cy="32" r="3" fill="#f59e0b" opacity="0.7">
+    <animate attributeName="r" values="2;4;2" dur="1.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.7;0.2;0.7" dur="1.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="105" cy="38" r="2" fill="#ef4444" opacity="0.5">
+    <animate attributeName="opacity" values="0.5;0.1;0.5" dur="2s" repeatCount="indefinite"/>
+  </circle>
 </svg>
