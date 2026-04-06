@@ -37,11 +37,16 @@ case ${MODE} in
         python -m pipeline.stock_pipeline 005930 삼성전자 >> "${LOG_FILE}" 2>&1
         python -m pipeline.archive_pipeline >> "${LOG_FILE}" 2>&1
         ;;
+    harness)
+        # Harness Pattern: Planner → Generator(2병렬) → Evaluator → Deploy
+        echo "=== Harness Pipeline 시작 ===" >> "${LOG_FILE}"
+        "${WORK_DIR}/scripts/harness_pipeline.sh" >> "${LOG_FILE}" 2>&1
+        ;;
     all)
         python -m pipeline.daily_pipeline >> "${LOG_FILE}" 2>&1
         ;;
     *)
-        echo "Usage: $0 [macro|stocks|all]"
+        echo "Usage: $0 [macro|stocks|all|harness]"
         exit 1
         ;;
 esac
