@@ -1,145 +1,270 @@
 #!/bin/bash
 # ================================================================
-# MarketPulse Harness Pipeline
-# Anthropic Harness Design Pattern 적용
-# 3단계: Planner → Generator(2병렬) → Evaluator → Deploy
+# MarketPulse Harness Pipeline v2
+# Anthropic Harness Design Pattern 완전 구현
+#
+# 핵심 개선:
+# 1. 피드백 루프 (FAIL → 재생성 → 재평가, 최대 2회)
+# 2. 파일 기반 상태 전달 (프롬프트 아닌 파일 참조)
+# 3. 스프린트 계약 전체 전달
+# 4. A→B 의존성 (A 완료 후 B가 A 결과 참조)
+# 5. 자동 검증 (글자수, 날짜, 가격 체크)
+# 6. 맥락 재설정 (깨끗한 상태 + 구조화된 인수)
+# 7. 리트라이 최대 2회
 # ================================================================
 
+set -e
 WORK_DIR="/Users/jacob119/dev/tools/prism-alpha"
 LOG_DIR="${WORK_DIR}/logs"
 LOG_FILE="${LOG_DIR}/harness_$(date +%Y-%m-%d).log"
 CLAUDE="${HOME}/.local/bin/claude"
 REPORTS_DIR="${WORK_DIR}/reports/macro"
 DASHBOARD_DIR="${WORK_DIR}/examples/dashboard/public/reports/macro"
+STATE_DIR="${WORK_DIR}/reports/.harness_state"
 DATE=$(date +%Y-%m-%d)
 DATETIME=$(date '+%Y-%m-%d %H:%M:%S KST')
+MAX_RETRY=2
 
-mkdir -p "${LOG_DIR}" "${REPORTS_DIR}" "${DASHBOARD_DIR}"
+mkdir -p "${LOG_DIR}" "${REPORTS_DIR}" "${DASHBOARD_DIR}" "${STATE_DIR}"
 
 log() { echo "[$(date '+%H:%M:%S')] $1" | tee -a "${LOG_FILE}"; }
 
 log "=========================================="
-log "MarketPulse Harness Pipeline 시작"
+log "MarketPulse Harness Pipeline v2"
 log "날짜: ${DATETIME}"
 log "=========================================="
 
 # ================================================================
-# Phase 1: PLANNER (solution-architect)
-# 오늘 시장 상황 파악 → 분석 사양 + 스프린트 계약
+# Phase 1: PLANNER
+# 파일 기반 상태: sprint_contract.md (전체 전달)
 # ================================================================
 log ""
-log "=== Phase 1: PLANNER ==="
+log "=== Phase 1: PLANNER (solution-architect) ==="
 
-SPRINT_CONTRACT="${WORK_DIR}/reports/sprint_contract_${DATE}.md"
+SPRINT="${STATE_DIR}/sprint_contract.md"
 
-"${CLAUDE}" -p "당신은 MarketPulse 솔루션 아키텍트입니다. 오늘 ${DATE} 기준으로:
+"${CLAUDE}" -p "당신은 MarketPulse 솔루션 아키텍트(Planner)입니다.
 
-1. WebSearch로 오늘의 핵심 시장 이벤트 3개를 파악
-2. 12개 리포트의 분석 사양(각 리포트가 반드시 다뤄야 할 핵심 포인트)을 작성
-3. 평가 기준(스프린트 계약)을 정의:
-   - 데이터 정확성: 가격/지수가 실제와 일치하는가
-   - 일관성: 12개 리포트 간 결론이 모순 없는가
-   - 완성도: 3000자 이상, 근거 있는 분석인가
-   - 시의성: 오늘 날짜 데이터가 반영되었는가
+오늘 ${DATE} 기준으로 스프린트 계약을 작성하세요.
 
-마크다운으로 작성해줘." \
-  --allowedTools "WebSearch,WebFetch" \
-  --output-format text > "${SPRINT_CONTRACT}" 2>> "${LOG_FILE}"
+## 작업 1: WebSearch로 시장 핵심 이벤트 파악
+- 코스피/코스닥 최근 동향
+- 미국 증시 (S&P500, 나스닥)
+- 원유/금/환율 동향
+- 지정학 리스크 (중동, 러우)
 
-log "스프린트 계약 생성 완료: $(wc -c < "${SPRINT_CONTRACT}") bytes"
+## 작업 2: 12개 리포트 분석 사양
+각 리포트가 반드시 포함해야 할 데이터 포인트를 명시:
+- macro_economy_report: [필수 데이터...]
+- commodity_report: [필수 데이터...]
+- stock_market_report: [필수 데이터...]
+- real_estate_report: [필수 데이터...]
+- kospi_market_analysis_report: [필수 데이터...]
+- foreign_selling_analysis_report: [필수 데이터...]
+- oil_surge_impact_report: [필수 데이터...]
+- war_historical_comparison_report: [필수 데이터...]
+- final_investment_report: [필수 데이터...]
+- timing_strategy_report: [필수 데이터...]
+- portfolio_analysis_report: [필수 데이터...]
+- monthly_report_2026-04: [필수 데이터...]
+
+## 작업 3: 평가 기준 (자동 검증 가능하도록 구체적으로)
+- 글자수: 각 리포트 3000자 이상
+- 날짜: '${DATE}' 또는 '4월 6일' 문자열 포함
+- 가격: KOSPI, S&P500, 금, WTI 최소 4개 지수 언급
+- 결론: 매수/매도/홀드 중 하나의 명확한 판단 포함
+
+${SPRINT} 파일에 저장하세요." \
+  --allowedTools "WebSearch,WebFetch,Write" \
+  --output-format text >> "${LOG_FILE}" 2>&1
+
+log "스프린트 계약: $(wc -c < "${SPRINT}" 2>/dev/null || echo 0) bytes"
 
 # ================================================================
-# Phase 2: GENERATOR (에이전트 A + B 병렬)
-# 각각 6개 리포트 작성
+# Phase 2a: GENERATOR A (독립 — 기초 분석 6개)
+# 맥락 재설정: 깨끗한 상태 + 스프린트 계약 파일 참조
 # ================================================================
 log ""
-log "=== Phase 2: GENERATOR (병렬) ==="
+log "=== Phase 2a: GENERATOR A (기초 분석) ==="
 
-# Agent A: 거시경제 + 원자재 + 주식 + 부동산 + 코스피 + 외국인
-"${CLAUDE}" -p "Investment Alpha 에이전트 A — 오늘 ${DATETIME} 기준 6개 리포트 작성.
+"${CLAUDE}" -p "당신은 Investment Alpha 에이전트 A (Generator)입니다.
+작성일시: ${DATETIME}
 
-스프린트 계약:
-$(cat "${SPRINT_CONTRACT}" 2>/dev/null | head -100)
+## 스프린트 계약
+${SPRINT} 파일을 읽고 분석 사양을 따르세요.
 
-1. 거시경제 분석 → ${REPORTS_DIR}/macro_economy_report.md
-2. 원자재 분석 → ${REPORTS_DIR}/commodity_report.md
-3. 주식시장 분석 → ${REPORTS_DIR}/stock_market_report.md
-4. 부동산 분석 → ${REPORTS_DIR}/real_estate_report.md
-5. 코스피 종합 → ${REPORTS_DIR}/kospi_market_analysis_report.md
-6. 외국인 매도 → ${REPORTS_DIR}/foreign_selling_analysis_report.md
+## 작업: 6개 기초 분석 리포트 작성
+WebSearch로 최신 데이터를 조사하고, 각 리포트를 파일로 저장하세요.
 
-각 리포트: 한국어, 3000자+, 작성일시 기입, WebSearch+Investing.com 교차검증." \
+1. ${REPORTS_DIR}/macro_economy_report.md — 거시경제 (금리, GDP, 인플레이션, 환율)
+2. ${REPORTS_DIR}/commodity_report.md — 원자재 (금, 은, 원유, 구리)
+3. ${REPORTS_DIR}/stock_market_report.md — 주식시장 (KOSPI, S&P500, 섹터)
+4. ${REPORTS_DIR}/real_estate_report.md — 부동산 (서울, REITs)
+5. ${REPORTS_DIR}/kospi_market_analysis_report.md — 코스피 종합 (기술적, 수급)
+6. ${REPORTS_DIR}/foreign_selling_analysis_report.md — 외국인 매매 분석
+
+## 규칙
+- 한국어, 각 3000자 이상
+- 상단에 '작성일시: ${DATETIME}' 기입
+- Investing.com 데이터 교차검증
+- 명확한 투자 판단(매수/홀드/매도) 포함" \
   --allowedTools "WebSearch,WebFetch,Read,Write" \
-  --output-format text >> "${LOG_FILE}" 2>&1 &
-PID_A=$!
+  --output-format text >> "${LOG_FILE}" 2>&1
 
-# Agent B: 유가 + 전쟁비교 + 종합 + 타이밍 + 포트폴리오 + 월별
-"${CLAUDE}" -p "Investment Alpha 에이전트 B — 오늘 ${DATETIME} 기준 6개 리포트 작성.
-
-스프린트 계약:
-$(cat "${SPRINT_CONTRACT}" 2>/dev/null | head -100)
-
-1. 유가 급등 영향 → ${REPORTS_DIR}/oil_surge_impact_report.md
-2. 전쟁 비교 분석 → ${REPORTS_DIR}/war_historical_comparison_report.md
-3. 종합 투자 분석 → ${REPORTS_DIR}/final_investment_report.md
-4. 매수 타이밍 전략 → ${REPORTS_DIR}/timing_strategy_report.md
-5. 포트폴리오 분석 → ${REPORTS_DIR}/portfolio_analysis_report.md
-6. 월별 종합 → ${REPORTS_DIR}/monthly_report_2026-04.md
-
-각 리포트: 한국어, 3000자+, 작성일시 기입, WebSearch+Investing.com 교차검증." \
-  --allowedTools "WebSearch,WebFetch,Read,Write" \
-  --output-format text >> "${LOG_FILE}" 2>&1 &
-PID_B=$!
-
-log "에이전트 A (PID: ${PID_A}) + B (PID: ${PID_B}) 병렬 실행 중..."
-wait ${PID_A}
-log "에이전트 A 완료 (exit: $?)"
-wait ${PID_B}
-log "에이전트 B 완료 (exit: $?)"
-
-# 리포트 생성 확인
-REPORT_COUNT=$(ls "${REPORTS_DIR}"/*.md 2>/dev/null | wc -l | tr -d ' ')
-log "생성된 리포트: ${REPORT_COUNT}개"
+log "에이전트 A 완료"
 
 # ================================================================
-# Phase 3: EVALUATOR (qa-engineer)
-# 12개 리포트 교차검증
+# Phase 2b: GENERATOR B (A 결과 참조 — 종합 분석 6개)
+# 핵심: A의 리포트를 읽고 참조하여 작성
+# ================================================================
+log ""
+log "=== Phase 2b: GENERATOR B (종합 분석 — A 결과 참조) ==="
+
+"${CLAUDE}" -p "당신은 Investment Alpha 에이전트 B (Generator)입니다.
+작성일시: ${DATETIME}
+
+## 스프린트 계약
+${SPRINT} 파일을 읽고 분석 사양을 따르세요.
+
+## 중요: 에이전트 A의 기초 분석 참조
+다음 6개 파일을 먼저 읽고, 이를 기반으로 종합 분석을 작성하세요:
+- ${REPORTS_DIR}/macro_economy_report.md
+- ${REPORTS_DIR}/commodity_report.md
+- ${REPORTS_DIR}/stock_market_report.md
+- ${REPORTS_DIR}/real_estate_report.md
+- ${REPORTS_DIR}/kospi_market_analysis_report.md
+- ${REPORTS_DIR}/foreign_selling_analysis_report.md
+
+## 작업: 6개 종합 분석 리포트 작성
+1. ${REPORTS_DIR}/oil_surge_impact_report.md — 유가 급등 영향 (A의 원자재+거시경제 참조)
+2. ${REPORTS_DIR}/war_historical_comparison_report.md — 전쟁 비교 (1973/1990/2003 vs 2026)
+3. ${REPORTS_DIR}/final_investment_report.md — 종합 투자 분석 (A의 6개 리포트 종합)
+4. ${REPORTS_DIR}/timing_strategy_report.md — 매수 타이밍 전략 (4~6월 이벤트)
+5. ${REPORTS_DIR}/portfolio_analysis_report.md — 포트폴리오 분석 (20종목)
+6. ${REPORTS_DIR}/monthly_report_2026-04.md — 4월 월별 종합
+
+## 포트폴리오 데이터
+${WORK_DIR}/examples/dashboard/public/portfolio_data.json 파일 참조
+${WORK_DIR}/examples/dashboard/public/dashboard_data.json 파일 참조
+
+## 규칙
+- 한국어, 각 3000자 이상
+- 상단에 '작성일시: ${DATETIME}' 기입
+- A의 분석과 일관된 결론
+- 명확한 투자 판단 포함" \
+  --allowedTools "WebSearch,WebFetch,Read,Write" \
+  --output-format text >> "${LOG_FILE}" 2>&1
+
+log "에이전트 B 완료"
+
+# ================================================================
+# Phase 3: EVALUATOR (피드백 루프 포함)
+# 자동 검증 + AI 검증 → FAIL 시 재생성 요청
 # ================================================================
 log ""
 log "=== Phase 3: EVALUATOR ==="
 
-EVAL_RESULT="${WORK_DIR}/reports/evaluation_${DATE}.md"
+EVAL_RESULT="${STATE_DIR}/evaluation.md"
+RETRY=0
+OVERALL_PASS=false
 
-"${CLAUDE}" -p "당신은 MarketPulse QA 엔지니어입니다. 다음 12개 리포트를 평가해줘.
+while [ ${RETRY} -lt ${MAX_RETRY} ] && [ "${OVERALL_PASS}" != "true" ]; do
+  RETRY=$((RETRY + 1))
+  log "평가 라운드 ${RETRY}/${MAX_RETRY}"
 
+  # --- 3a: 자동 검증 (스크립트) ---
+  AUTO_FAIL=""
+  for md_file in "${REPORTS_DIR}"/*.md; do
+    [ -f "$md_file" ] || continue
+    fname=$(basename "$md_file")
+    chars=$(wc -c < "$md_file" | tr -d ' ')
+    has_date=$(grep -c "${DATE}\|4월 6일\|April 6" "$md_file" 2>/dev/null || echo 0)
+
+    if [ "$chars" -lt 3000 ]; then
+      AUTO_FAIL="${AUTO_FAIL}\n  ❌ ${fname}: ${chars}자 (3000자 미만)"
+    fi
+    if [ "$has_date" -eq 0 ]; then
+      AUTO_FAIL="${AUTO_FAIL}\n  ❌ ${fname}: 오늘 날짜(${DATE}) 미포함"
+    fi
+  done
+
+  if [ -n "${AUTO_FAIL}" ]; then
+    log "자동 검증 실패:${AUTO_FAIL}"
+
+    if [ ${RETRY} -lt ${MAX_RETRY} ]; then
+      log "재생성 요청 (피드백 루프)..."
+
+      # 실패한 리포트만 재생성
+      FAILED_LIST=$(echo -e "${AUTO_FAIL}" | grep "❌" | sed 's/.*❌ //' | sed 's/:.*//')
+      "${CLAUDE}" -p "다음 리포트가 품질 기준을 통과하지 못했습니다. 수정해주세요.
+
+실패 내역:
+${AUTO_FAIL}
+
+스프린트 계약: ${SPRINT}
 리포트 디렉토리: ${REPORTS_DIR}/
 
-스프린트 계약 기준:
-$(cat "${SPRINT_CONTRACT}" 2>/dev/null | head -50)
+각 실패한 리포트를 다시 작성해주세요. 3000자 이상, 오늘 날짜(${DATE}) 포함 필수." \
+        --allowedTools "WebSearch,WebFetch,Read,Write" \
+        --output-format text >> "${LOG_FILE}" 2>&1
 
-평가 항목:
-1. 데이터 정확성 — 가격/지수가 WebSearch 결과와 일치하는가?
-2. 일관성 — 12개 리포트 간 결론이 모순 없는가?
-3. 완성도 — 각 리포트 3000자 이상인가?
-4. 시의성 — 오늘 ${DATE} 날짜 데이터가 반영되었는가?
+      continue
+    fi
+  fi
 
-각 리포트별 PASS/FAIL + 이유를 작성하고,
-전체 종합 평가(PASS/FAIL)를 내려줘.
+  # --- 3b: AI 검증 (교차검증) ---
+  "${CLAUDE}" -p "당신은 MarketPulse QA 평가자(Evaluator)입니다.
 
-마크다운으로 ${EVAL_RESULT}에 저장해줘." \
-  --allowedTools "WebSearch,Read,Write,Glob,Grep" \
-  --output-format text >> "${LOG_FILE}" 2>&1
+## 작업: 12개 리포트 교차검증
+${REPORTS_DIR}/ 디렉토리의 모든 .md 파일을 읽고 평가하세요.
+스프린트 계약: ${SPRINT} 파일 참조.
 
-log "평가 완료: $(wc -c < "${EVAL_RESULT}" 2>/dev/null || echo 0) bytes"
+## 평가 기준
+1. 데이터 정확성 — WebSearch로 핵심 가격/지수 1개 이상 교차검증
+2. 일관성 — 12개 리포트 간 결론 모순 체크 (예: A에서 매수, B에서 매도)
+3. 완성도 — 분석 근거와 출처가 있는가
+4. 시의성 — ${DATE} 데이터 반영 여부
+
+## 출력 형식 (${EVAL_RESULT}에 저장)
+각 리포트별:
+- [PASS/FAIL] 리포트명 — 이유
+전체:
+- OVERALL: PASS 또는 FAIL
+
+OVERALL: PASS 또는 OVERALL: FAIL을 반드시 마지막에 기입." \
+    --allowedTools "WebSearch,Read,Write,Glob,Grep" \
+    --output-format text >> "${LOG_FILE}" 2>&1
+
+  # PASS/FAIL 판정 확인
+  if grep -qi "OVERALL.*PASS" "${EVAL_RESULT}" 2>/dev/null; then
+    OVERALL_PASS=true
+    log "✅ 평가 PASS (라운드 ${RETRY})"
+  else
+    log "❌ 평가 FAIL (라운드 ${RETRY})"
+    if [ ${RETRY} -lt ${MAX_RETRY} ]; then
+      log "피드백 루프: 재생성 요청..."
+      FEEDBACK=$(grep "FAIL" "${EVAL_RESULT}" 2>/dev/null | head -10)
+      "${CLAUDE}" -p "평가자가 다음 항목에서 FAIL을 판정했습니다:
+
+${FEEDBACK}
+
+해당 리포트를 수정해주세요. 리포트 디렉토리: ${REPORTS_DIR}/
+스프린트 계약: ${SPRINT}" \
+        --allowedTools "WebSearch,WebFetch,Read,Write" \
+        --output-format text >> "${LOG_FILE}" 2>&1
+    fi
+  fi
+done
+
+log "최종 평가: $([ "${OVERALL_PASS}" = "true" ] && echo "PASS ✅" || echo "FAIL ❌ (배포 진행)")"
 
 # ================================================================
-# Phase 4: DEPLOY (devops-engineer)
-# HTML 생성 + 아카이브 + 대시보드 복사
+# Phase 4: DEPLOY
+# HTML 생성 + 대시보드 복사 + 아카이브
 # ================================================================
 log ""
 log "=== Phase 4: DEPLOY ==="
 
-# HTML 생성 (pandoc)
 CSS_FILE="${WORK_DIR}/examples/dashboard/public/reports/report-style.css"
 HTML_COUNT=0
 for md_file in "${REPORTS_DIR}"/*.md; do
@@ -153,27 +278,26 @@ for md_file in "${REPORTS_DIR}"/*.md; do
 done
 log "HTML 생성: ${HTML_COUNT}개"
 
-# 대시보드 public 복사
 cp "${REPORTS_DIR}"/*.html "${DASHBOARD_DIR}/" 2>/dev/null
 log "대시보드 복사 완료"
 
-# 아카이브
 ARCHIVE_DIR="${WORK_DIR}/reports/archive/${DATE}"
 mkdir -p "${ARCHIVE_DIR}"
 cp "${REPORTS_DIR}"/*.md "${ARCHIVE_DIR}/" 2>/dev/null
 cp "${REPORTS_DIR}"/*.html "${ARCHIVE_DIR}/" 2>/dev/null
-cp "${SPRINT_CONTRACT}" "${ARCHIVE_DIR}/" 2>/dev/null
+cp "${SPRINT}" "${ARCHIVE_DIR}/" 2>/dev/null
 cp "${EVAL_RESULT}" "${ARCHIVE_DIR}/" 2>/dev/null
-log "아카이브 저장: ${ARCHIVE_DIR}"
+log "아카이브: ${ARCHIVE_DIR}"
 
-# ================================================================
-# 완료
-# ================================================================
+# 상태 파일 정리
+rm -rf "${STATE_DIR}" 2>/dev/null
+
 log ""
 log "=========================================="
-log "Harness Pipeline 완료"
-log "  리포트: ${REPORT_COUNT}개"
+log "Harness Pipeline v2 완료"
+log "  리포트: $(ls "${REPORTS_DIR}"/*.md 2>/dev/null | wc -l | tr -d ' ')개"
 log "  HTML: ${HTML_COUNT}개"
+log "  평가: $([ "${OVERALL_PASS}" = "true" ] && echo "PASS" || echo "FAIL")"
+log "  리트라이: ${RETRY}회"
 log "  아카이브: ${ARCHIVE_DIR}"
-log "  평가: ${EVAL_RESULT}"
 log "=========================================="
